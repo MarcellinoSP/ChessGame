@@ -5,6 +5,13 @@ class Program
 {
 	static void Main()
 	{
+		DrawBoard();
+	}
+	
+	//Drawing Board Method
+	
+	static void DrawBoard()
+	{
 		ChessBoard myBoard = new();
 		bool setBoard = myBoard.SetBoardSize(8);
 		int boardSize = myBoard.GetBoardSize();
