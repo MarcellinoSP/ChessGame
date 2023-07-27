@@ -1,4 +1,6 @@
 ﻿using ChessGame;
+using System;
+
 class Program
 {
 	static void Main()
