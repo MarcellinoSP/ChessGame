@@ -2,5 +2,7 @@ namespace ChessGame;
 public interface IPlayer
 {
 	int GetUID();
-	bool SetUID(int id);
+	string GetName();
+	bool SetUID(int uid);
+	bool SetName(string name);
 }

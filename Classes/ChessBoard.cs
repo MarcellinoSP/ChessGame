@@ -1,5 +1,5 @@
 namespace ChessGame;
-public class ChessBoard
+public class ChessBoard : IBoard
 {
 	private int _size;
 	

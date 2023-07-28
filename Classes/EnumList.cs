@@ -8,9 +8,9 @@ public enum GameStatus
 	STALEMATE
 }
 
-public enum Color
+public enum PlayerColor
 {
-	WHITE,
+	WHITE = 1,
 	BLACK
 }
 
