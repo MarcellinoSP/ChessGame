@@ -2,10 +2,10 @@ namespace ChessGame;
 public abstract class Piece
 {
 	protected bool captured;
-	protected Position position = new();
+	protected Position position = new Position();
 }
 
-public class King
+public class King : Piece
 {
 	private bool _castlingDone;
 	
@@ -30,7 +30,7 @@ public class King
 	}
 }
 
-public class Pawn
+public class Pawn : Piece
 {
 	private bool _promotionStatus;
 	private bool _enPassantStatus;
@@ -63,7 +63,7 @@ public class Pawn
 	}
 }
 
-public class Rook
+public class Rook : Piece
 {
 	public bool IsMoved()
 	{
@@ -71,17 +71,17 @@ public class Rook
 	}
 }
 
-public class Queen
+public class Queen : Piece
 {
 	
 }
 
-public class Knight
+public class Knight : Piece
 {
 	
 }
 
-public class Bishop
+public class Bishop : Piece
 {
 	
 }

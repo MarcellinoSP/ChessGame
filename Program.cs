@@ -5,11 +5,10 @@ class Program
 {
 	static void Main()
 	{
-		IBoard board = new ChessBoard();
-		GameRunner chessGame1 = new(board);
-		DrawBoard(chessGame1);
-		AddPlayer(chessGame1);
-		GetPlayer(chessGame1);
+		GameRunner chessGame = new();
+		AddPlayer(chessGame);
+		PlayerList(chessGame);
+		DrawBoard(chessGame);
 	}
 	
 	//Drawing Board Method
@@ -18,7 +17,6 @@ class Program
 	{
 		bool setBoard = game.SetBoardBoundary(8);
 		int boardSize = game.GetBoardBoundary();
-		Console.WriteLine($"Current board size: {boardSize}");
 		for(int i = 0; i <= boardSize; i++)
 		{
 			if(i < boardSize)
@@ -43,27 +41,35 @@ class Program
 				Console.WriteLine("+");
 			}
 		}
+		Console.WriteLine($"Current board size: {boardSize}");
 	}
 	
 	static void AddPlayer(GameRunner game)
 	{
 		IPlayer player1 = new HumanPlayer();
-		bool name1 = player1.SetName("Alvaro");
+		bool name1 = player1.SetName("Lumine");
 		bool uid1 = player1.SetUID(1);
 		
 		IPlayer player2 = new HumanPlayer();
 		bool name2 = player2.SetName("Aether");
 		bool uid2 =player2.SetUID(2);
 		
-		bool addPlayer1 = game.AddPlayer(player1);
-		bool addPlayer2 = game.AddPlayer(player2);
+		bool? addPlayer1 = game.AddPlayer(player1);
+		bool? addPlayer2 = game.AddPlayer(player2);
 		
 		Console.WriteLine($"Add player status: {addPlayer1}");
 		Console.WriteLine($"Add player status: {addPlayer2}");
 	}
 	
-	static void GetPlayer(GameRunner game)
+	static void PlayerList(GameRunner game)
 	{
-		
+		Dictionary<IPlayer, PlayerColor> playerList = game.GetPlayerList();
+		foreach(var player in playerList)
+		{
+			IPlayer playerName = player.Key;
+			PlayerColor color = player.Value;
+			
+			Console.WriteLine($"Currently playing: {playerName.GetName()} as {color}");
+		}
 	}
 }
