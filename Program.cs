@@ -9,6 +9,16 @@ class Program
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
 		DrawBoard(chessGame);
+		chessGame.InitializePieces();
+		
+		Dictionary<IPlayer, List<Piece>> piecesList = chessGame.GetPlayerPieces();
+		foreach(var pieces in piecesList)
+		{
+			IPlayer playerName = pieces.Key;
+			List<Piece> piecesOwned = pieces.Value;
+			
+			Console.WriteLine($"{playerName.GetName()}, {piecesOwned}");
+		}
 	}
 	
 	//Drawing Board Method
@@ -23,12 +33,12 @@ class Program
 			{
 				for(int x = 0; x < boardSize; x++)
 				{
-					Console.Write("+---");
+					Console.Write("+----");
 				}
 				Console.WriteLine("+");
 				for(int x = 0; x < boardSize; x++)
 				{
-					Console.Write("|   ");
+					Console.Write("|    ");
 				}
 				Console.WriteLine("|");
 			}
@@ -36,7 +46,7 @@ class Program
 			{
 				for(int x = 0; x < boardSize; x++)
 				{
-					Console.Write("+---");
+					Console.Write("+----");
 				}
 				Console.WriteLine("+");
 			}

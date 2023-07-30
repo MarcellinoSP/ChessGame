@@ -5,13 +5,15 @@ public class GameRunner
 	private IBoard _chessBoard;
 	private ChessMove _movementLibrary;
 	private IPlayer _currentTurn;
-	private Dictionary<IPlayer, PlayerColor> _playerList = new Dictionary<IPlayer, PlayerColor>();
-	private Dictionary<IPlayer, List<Piece>> _piecesList = new Dictionary<IPlayer, List<Piece>>();
+	private Dictionary<IPlayer, PlayerColor> _playerList;
+	private Dictionary<IPlayer, List<Piece>> _piecesList;
 	private GameStatus _gameStatus;
 	
 	public GameRunner()
 	{
 		_chessBoard = new ChessBoard();
+		_playerList = new Dictionary<IPlayer, PlayerColor>();
+		_piecesList = new Dictionary<IPlayer, List<Piece>>();
 	}
 	public bool? AddPlayer(IPlayer player)
 	{
@@ -48,15 +50,26 @@ public class GameRunner
 		int boundary = _chessBoard.GetBoardSize();
 		return boundary;
 	}
-	//CODE BELOW STILL ERROR
-	// public bool InitializePieces()
-	// {
-	// 	Pawn[] pawn = new Pawn[8]();
-	// 	for(int i = 0; i < 8; i++)
-	// 	{
-	// 		_piecesList.Add(_playerList, pawn[i]);
-	// 	}
-	// 	return true;
-	// }
-	//CODE ABOVE STILL ERROR
+	
+	public Dictionary<IPlayer, List<Piece>> GetPlayerPieces()
+	{
+		return _piecesList;
+	}
+	
+	//CODE BELOW STILL CONFUSING
+	public bool InitializePieces()
+	{
+		List <Piece> pieces = new List <Piece>(); 
+		foreach(var player in _playerList.Keys)
+		{
+			for(int i = 1; i <= 8; i++)
+			{
+				Pawn pawn = new Pawn(2, i);
+				pieces.Add(pawn);
+			}
+			_piecesList[player] = pieces;
+		}
+		return true;
+	}
+	//CODE ABOVE STILL CONFUSING
 }
