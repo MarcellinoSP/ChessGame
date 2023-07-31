@@ -3,6 +3,7 @@ public abstract class Piece
 {
 	protected bool captured;
 	protected Position position;
+	protected string _pieceType {get; set;}
 	
 	public Piece()
 	{
@@ -77,10 +78,11 @@ public class Pawn : Piece
 	private bool _promotionStatus;
 	private bool _enPassantStatus;
 	
-	public Pawn(int rank, int files)
+	public Pawn(int rank, int files, string type)
 	{
 		position.SetRank(rank);
 		position.SetFiles(files);
+		_pieceType = type;
 	}
 	
 	public bool GetPromotionStatus()

@@ -64,7 +64,7 @@ public class GameRunner
 		{
 			for(int i = 1; i <= 8; i++)
 			{
-				Pawn pawn = new Pawn(2, i);
+				Pawn pawn = new Pawn(2, i, "Pawn");
 				pieces.Add(pawn);
 			}
 			_piecesList[player] = pieces;

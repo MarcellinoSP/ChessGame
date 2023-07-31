@@ -2,7 +2,7 @@ namespace ChessGame;
 
 public class HumanPlayer : IPlayer
 {
-	private string _playerName;
+	private string? _playerName;
 	private int _playerID;
 	
 	public bool SetName(string name)
