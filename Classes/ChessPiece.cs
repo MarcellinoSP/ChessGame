@@ -3,7 +3,7 @@ public abstract class Piece
 {
 	protected bool captured;
 	protected Position position;
-	protected string _pieceType {get; set;}
+	protected string _pieceType;
 	
 	public Piece()
 	{
@@ -36,16 +36,22 @@ public abstract class Piece
 		int files = position.GetFiles();
 		return files;
 	}
+	
+	public string Type()
+	{
+		return _pieceType;
+	}
 }
 
 public class King : Piece
 {
 	private bool _castlingDone;
 	
-	public King(int rank, int files)
+	public King(int rank, int files, string type)
 	{
 		position.SetRank(rank);
 		position.SetFiles(files);
+		_pieceType = type;
 	}
 	
 	public bool GetCastlingStatus()
@@ -115,10 +121,11 @@ public class Pawn : Piece
 
 public class Rook : Piece
 {
-	public Rook(int rank, int files)
+	public Rook(int rank, int files, string type)
 	{
 		position.SetRank(rank);
 		position.SetFiles(files);
+		_pieceType = type;
 	}
 	
 	public bool IsMoved()
@@ -129,27 +136,30 @@ public class Rook : Piece
 
 public class Queen : Piece
 {
-	public Queen(int rank, int files)
+	public Queen(int rank, int files, string type)
 	{
 		position.SetRank(rank);
 		position.SetFiles(files);
+		_pieceType = type;
 	}
 }
 
 public class Knight : Piece
 {
-	public Knight(int rank, int files)
+	public Knight(int rank, int files, string type)
 	{
 		position.SetRank(rank);
 		position.SetFiles(files);
+		_pieceType = type;
 	}
 }
 
 public class Bishop : Piece
 {
-	public Bishop(int rank, int files)
+	public Bishop(int rank, int files, string type)
 	{
 		position.SetRank(rank);
 		position.SetFiles(files);
+		_pieceType = type;
 	}
 }

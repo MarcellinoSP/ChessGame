@@ -8,17 +8,8 @@ class Program
 		GameRunner chessGame = new();
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
+		PieceInit(chessGame);
 		DrawBoard(chessGame);
-		chessGame.InitializePieces();
-		
-		Dictionary<IPlayer, List<Piece>> piecesList = chessGame.GetPlayerPieces();
-		foreach(var pieces in piecesList)
-		{
-			IPlayer playerName = pieces.Key;
-			List<Piece> piecesOwned = pieces.Value;
-			
-			Console.WriteLine($"{playerName.GetName()}, {piecesOwned}");
-		}
 	}
 	
 	//Drawing Board Method
@@ -27,31 +18,34 @@ class Program
 	{
 		bool setBoard = game.SetBoardBoundary(8);
 		int boardSize = game.GetBoardBoundary();
-		for(int i = 0; i <= boardSize; i++)
+		// Dictionary<IPlayer, List<Piece>> piecesList = game.GetPlayerPieces();
+		Console.WriteLine("+----+----+----+----+----+----+----+----+");
+		for(int i = 0; i < boardSize; i++)
 		{
-			if(i < boardSize)
+			for(int j = 0; j < boardSize; j++)
 			{
-				for(int x = 0; x < boardSize; x++)
+				// Piece piece = piecesList.TryGetValue(playerName, out List<Piece> playerPiece);
+				// if(piece != null)
+				// {
+				// 	Console.WriteLine($" {piece.Type()}");
+				// }
+				// else
+				// {
+				// 	Console.Write("|    ");
+				// }
+				Piece piece = game.CheckPiece(i, j);
+				if(piece != null)
 				{
-					Console.Write("+----");
+					Console.Write($"| {piece.Type()} ");
 				}
-				Console.WriteLine("+");
-				for(int x = 0; x < boardSize; x++)
+				else
 				{
 					Console.Write("|    ");
 				}
-				Console.WriteLine("|");
 			}
-			else
-			{
-				for(int x = 0; x < boardSize; x++)
-				{
-					Console.Write("+----");
-				}
-				Console.WriteLine("+");
-			}
+			Console.WriteLine("|");
+	   		Console.WriteLine("+----+----+----+----+----+----+----+----+");
 		}
-		Console.WriteLine($"Current board size: {boardSize}");
 	}
 	
 	static void AddPlayer(GameRunner game)
@@ -80,6 +74,37 @@ class Program
 			PlayerColor color = player.Value;
 			
 			Console.WriteLine($"Currently playing: {playerName.GetName()} as {color}");
+		}
+	}
+	
+	static void PieceInitializing(GameRunner game)
+	{
+		game.InitializePieces();
+		Dictionary<IPlayer, List<Piece>> piecesList = game.GetPlayerPieces();
+		foreach(var pieces in piecesList)
+		{
+			IPlayer playerName = pieces.Key;
+			if(piecesList.TryGetValue(playerName, out List<Piece> playerPiece))
+			{
+				foreach(Piece piece in playerPiece)
+				{
+					Console.WriteLine($"{playerName.GetName()}, {piece.Type()}");
+				}
+			}
+			Console.WriteLine();
+		}
+	}
+	
+	static void PieceInit(GameRunner game)
+	{
+		bool check = game.InitializingPiece();
+		if(check)
+		{
+			Console.WriteLine("Piece initializing success");
+		}
+		else
+		{
+			Console.WriteLine("Please Re-check");
 		}
 	}
 }
