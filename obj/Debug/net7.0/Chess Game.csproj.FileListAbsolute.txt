@@ -1,18 +1,3 @@
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\bin\Debug\net7.0\Chess Game.exe
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\bin\Debug\net7.0\Chess Game.deps.json
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\bin\Debug\net7.0\Chess Game.runtimeconfig.json
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\bin\Debug\net7.0\Chess Game.dll
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\bin\Debug\net7.0\Chess Game.pdb
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.csproj.AssemblyReference.cache
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.AssemblyInfoInputs.cache
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.AssemblyInfo.cs
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.csproj.CoreCompileInputs.cache
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.dll
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\refint\Chess Game.dll
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.pdb
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.genruntimeconfig.cache
-C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\ref\Chess Game.dll
 C:\Users\Batch 3\Documents\Bootcamp New\ChessGame\bin\Debug\net7.0\Chess Game.exe
 C:\Users\Batch 3\Documents\Bootcamp New\ChessGame\bin\Debug\net7.0\Chess Game.deps.json
 C:\Users\Batch 3\Documents\Bootcamp New\ChessGame\bin\Debug\net7.0\Chess Game.runtimeconfig.json

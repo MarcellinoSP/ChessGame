@@ -6,7 +6,7 @@ public class GameRunner
 	private ChessMove _movementLibrary;
 	private IPlayer _currentTurn;
 	private Dictionary<IPlayer, PlayerColor> _playerList;
-	private Dictionary<IPlayer, List<Piece>> _piecesList; //Is This Necessary?
+	private Dictionary<IPlayer, List<Piece>> _piecesList; //???
 	private List<Piece> _listOfPiece;
 	private GameStatus _gameStatus;
 	
@@ -16,6 +16,13 @@ public class GameRunner
 		_playerList = new Dictionary<IPlayer, PlayerColor>();
 		_piecesList = new Dictionary<IPlayer, List<Piece>>();
 		_listOfPiece = new List<Piece>();
+	}
+	
+	public bool SetMove(int index, int rank, int files)
+	{
+		_listOfPiece[index].SetFiles(rank);
+		_listOfPiece[index].SetRank(rank);
+		return true;
 	}
 	public bool? AddPlayer(IPlayer player)
 	{

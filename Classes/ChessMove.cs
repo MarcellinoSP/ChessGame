@@ -1,9 +1,13 @@
 namespace ChessGame;
 public class ChessMove
 {
-	private Dictionary <Piece, IMoveSet> _moveSet = new Dictionary <Piece, IMoveSet>();
+	private Dictionary <Piece, IMoveSet> _moveSet;
 	private int _moveBoundary;
 	
+	public ChessMove()
+	{
+		_moveSet = new Dictionary<Piece, IMoveSet>();
+	}
 	public bool AddPiece(KeyValuePair<Piece, IMoveSet> addPiece)
 	{
 		return true;

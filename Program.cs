@@ -10,6 +10,10 @@ class Program
 		PlayerList(chessGame);
 		PieceInit(chessGame);
 		DrawBoard(chessGame);
+		
+		chessGame.SetMove(1, 3, 5);		//Sementara SetMove([index], rank, files)
+		chessGame.SetMove(0, 5, 7);		//Butuh improvisasi: SetMove(piece.Type, rank, files)
+		DrawBoard(chessGame);
 	}
 	
 	//Drawing Board Method
@@ -46,6 +50,7 @@ class Program
 			Console.WriteLine("|");
 	   		Console.WriteLine("+----+----+----+----+----+----+----+----+");
 		}
+		Console.WriteLine("");
 	}
 	
 	static void AddPlayer(GameRunner game)
