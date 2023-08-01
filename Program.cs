@@ -1,4 +1,6 @@
-﻿using ChessGame;
+﻿// #DEFINE TRY
+
+using ChessGame;
 using System;
 
 class Program
@@ -6,14 +8,16 @@ class Program
 	static void Main()
 	{
 		GameRunner chessGame = new();
+		// #IF TRY
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
 		PieceInit(chessGame);
 		DrawBoard(chessGame);
 		
-		chessGame.SetMove(1, 3, 5);		//Sementara SetMove([index], rank, files)
-		chessGame.SetMove(0, 5, 7);		//Butuh improvisasi: SetMove(piece.Type, rank, files)
+		chessGame.Move("P1", 6, 1); //MASIH NGEBUG
 		DrawBoard(chessGame);
+		
+		// #ENDIF
 	}
 	
 	//Drawing Board Method

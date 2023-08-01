@@ -18,12 +18,6 @@ public class GameRunner
 		_listOfPiece = new List<Piece>();
 	}
 	
-	public bool SetMove(int index, int rank, int files)
-	{
-		_listOfPiece[index].SetFiles(rank);
-		_listOfPiece[index].SetRank(rank);
-		return true;
-	}
 	public bool? AddPlayer(IPlayer player)
 	{
 		PlayerColor playerColor = new();
@@ -45,15 +39,18 @@ public class GameRunner
 			return false;
 		}
 	}
+	
 	public Dictionary<IPlayer, PlayerColor> GetPlayerList()
 	{
 		return _playerList;
 	}
+	
 	public bool SetBoardBoundary(int size)
 	{
 		bool condition = _chessBoard.SetBoardSize(size);
 		return condition;
 	}
+	
 	public int GetBoardBoundary()
 	{
 		int boundary = _chessBoard.GetBoardSize();
@@ -145,5 +142,39 @@ public class GameRunner
 	public Piece CheckPiece(int rank, int files)
 	{
 		return _listOfPiece.FirstOrDefault(piece => piece.GetRank() == rank && piece.GetFiles() == files);
+	}
+	
+	public bool Move(string type, int rank, int files)
+	{
+		bool occupied = IsOccupied(type, rank, files);
+		if(occupied)
+		{
+			return false;
+		}
+		else
+		{
+			Piece piece = _listOfPiece.FirstOrDefault(pieceType => pieceType.Type() == type);
+			piece.SetRank(rank);
+			piece.SetFiles(files);
+			Console.WriteLine(piece.GetRank());
+			Console.WriteLine(piece.GetFiles());
+			return true;	
+		}
+	}
+	
+	public bool IsOccupied(string type, int rank, int files)
+	{
+		foreach(var item in _listOfPiece){
+			if(rank == item.GetRank() && files == item.GetFiles())
+			{
+				if(type.Any(char.IsUpper) && item.Type().Any(char.IsUpper))
+				{
+					// Console.WriteLine(item.Type());
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
 	}
 }

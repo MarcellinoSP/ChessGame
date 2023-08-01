@@ -21,7 +21,7 @@ public abstract class Piece
 	
 	public bool SetFiles(int files)
 	{
-		position.SetRank(files);
+		position.SetFiles(files);
 		return true;
 	}
 	
