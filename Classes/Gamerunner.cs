@@ -14,7 +14,6 @@ public class GameRunner
 		_chessBoard = new ChessBoard();
 		_playerList = new Dictionary<IPlayer, PlayerColor>();
 		_piecesList = new Dictionary<IPlayer, List<Piece>>();
-		// _listOfPiece = new List<Piece>();
 	}
 	
 	public bool? AddPlayer(IPlayer player)
@@ -191,10 +190,21 @@ public class GameRunner
 			foreach(var pieceList in pieces)
 			{
 				bool status = pieceList.GetStatus();
-				// Console.WriteLine(pieceList.Type());
 				if(status)
 				{
 					Console.WriteLine($"Piece to remove: {pieceList.Type()}");
+					if(pieceList.Type() == "K1")
+					{
+						SetGameStatus(GameStatus.BLACK_WIN);
+					}
+					else if(pieceList.Type() == "k1")
+					{
+						SetGameStatus(GameStatus.WHITE_WIN);
+					}
+					else
+					{
+						SetGameStatus(GameStatus.ONGOING);
+					}
 					pieces.Remove(piece);
 					return true;
 				}
@@ -205,12 +215,29 @@ public class GameRunner
 	
 	public bool KingCheckStatus()
 	{
-		
+		// foreach(var pieces in _piecesList)
+		// {
+		// 	foreach(var piece in pieces)
+		// 	{
+		// 		if(piece.Type())
+		// 	}
+		// }
 		return true;
 	}
 	
 	public bool PawnPromotion(Piece piece, PromoteTo promoteTo)
 	{
 		return true;
+	}
+	
+	public bool SetGameStatus(GameStatus status)
+	{
+		_gameStatus = status;
+		return true;
+	}
+	
+	public GameStatus CheckGameStatus()
+	{
+		return _gameStatus;
 	}
 }

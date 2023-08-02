@@ -11,13 +11,14 @@ class Program
 		PieceInitializing(chessGame);
 		DrawBoard(chessGame);
 		
-		chessGame.Move("k1", 7, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG //Sekarang bug di black piece //BUG FIXED
+		chessGame.Move("p1", 7, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG //Sekarang bug di black piece //BUG FIXED
 		DrawBoard(chessGame);
-		chessGame.Move("k1", 4, 3);
+		chessGame.Move("p1", 4, 3);
 		// CheckPiece(chessGame);
 		DrawBoard(chessGame);				//New Bug = piece ngga ke capture //UPDATE: BUG FIXED
+		
+		GameStatus(chessGame);
 	}
-	
 	//Drawing Board Method
 	
 	static void DrawBoard(GameRunner game)
@@ -113,5 +114,18 @@ class Program
 			}
 			Console.WriteLine();
 		}
+	}
+	
+	static void GameStatus(GameRunner game)
+	{
+		GameStatus status = game.CheckGameStatus();
+
+		// switch(status)
+		// {
+		// 	case GameStatus.BLACK_WIN:
+		// 		Console.WriteLine("Black Side Win");
+		// 	break;
+		// }
+		Console.WriteLine(status);
 	}
 }
