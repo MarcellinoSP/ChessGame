@@ -14,7 +14,7 @@ class Program
 		PieceInit(chessGame);
 		DrawBoard(chessGame);
 		
-		chessGame.Move("P1", 6, 1); //MASIH NGEBUG
+		chessGame.Move("P1", 6, 4); //MASIH NGEBUG //2/8/2023 - UDAH GA NGEBUG COYY
 		DrawBoard(chessGame);
 		
 		// #ENDIF

@@ -167,13 +167,15 @@ public class GameRunner
 		foreach(var item in _listOfPiece){
 			if(rank == item.GetRank() && files == item.GetFiles())
 			{
-				if(type.Any(char.IsUpper) && item.Type().Any(char.IsUpper))
+				Console.WriteLine($"Is Occupied by {item.Type()}");
+				if(item.Type().Any(Char.IsUpper) && type.Any(Char.IsUpper))
 				{
-					// Console.WriteLine(item.Type());
 					return true;
+					Console.WriteLine("Double Uppercase Detected");
 				}
+				return false;
 			}
-			return false;
+			// Console.WriteLine(item.GetRank());
 		}
 		return false;
 	}
