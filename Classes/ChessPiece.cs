@@ -41,6 +41,16 @@ public abstract class Piece
 	{
 		return _pieceType;
 	}
+	
+	public void ChangeStatus()
+	{
+		captured = true;
+	}
+	
+	public bool GetStatus()
+	{
+		return captured;
+	}
 }
 
 public class King : Piece

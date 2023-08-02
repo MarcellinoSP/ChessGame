@@ -1,6 +1,4 @@
-﻿// #DEFINE TRY
-
-using ChessGame;
+﻿using ChessGame;
 using System;
 
 class Program
@@ -8,16 +6,16 @@ class Program
 	static void Main()
 	{
 		GameRunner chessGame = new();
-		// #IF TRY
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
-		PieceInit(chessGame);
+		PieceInitializing(chessGame);
 		DrawBoard(chessGame);
 		
-		chessGame.Move("P1", 6, 4); //MASIH NGEBUG //2/8/2023 - UDAH GA NGEBUG COYY
+		chessGame.Move("K1", 0, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG
 		DrawBoard(chessGame);
-		
-		// #ENDIF
+		chessGame.Move("K1", 4, 0);
+		CheckPiece(chessGame);
+		DrawBoard(chessGame);				//New Bug = piece ngga ke capture //UPDATE: BUG FIXED
 	}
 	
 	//Drawing Board Method
@@ -26,21 +24,11 @@ class Program
 	{
 		bool setBoard = game.SetBoardBoundary(8);
 		int boardSize = game.GetBoardBoundary();
-		// Dictionary<IPlayer, List<Piece>> piecesList = game.GetPlayerPieces();
 		Console.WriteLine("+----+----+----+----+----+----+----+----+");
 		for(int i = 0; i < boardSize; i++)
 		{
 			for(int j = 0; j < boardSize; j++)
 			{
-				// Piece piece = piecesList.TryGetValue(playerName, out List<Piece> playerPiece);
-				// if(piece != null)
-				// {
-				// 	Console.WriteLine($" {piece.Type()}");
-				// }
-				// else
-				// {
-				// 	Console.Write("|    ");
-				// }
 				Piece piece = game.CheckPiece(i, j);
 				if(piece != null)
 				{
@@ -60,17 +48,23 @@ class Program
 	static void AddPlayer(GameRunner game)
 	{
 		IPlayer player1 = new HumanPlayer();
-		bool name1 = player1.SetName("Lumine");
+		// Console.Write("Input player 1 name: ");
+		// string player1Name = Console.ReadLine();
+		string player1Name = "Alvaro";
+		
+		bool name1 = player1.SetName(player1Name);
 		bool uid1 = player1.SetUID(1);
+		bool? addPlayer1 = game.AddPlayer(player1);
+		Console.WriteLine($"Add player status: {addPlayer1}");
 		
 		IPlayer player2 = new HumanPlayer();
-		bool name2 = player2.SetName("Aether");
+		// Console.Write("Input player 2 name: ");
+		// string player2Name = Console.ReadLine();
+		string player2Name = "Altair";
+		
+		bool name2 = player2.SetName(player2Name);
 		bool uid2 =player2.SetUID(2);
-		
-		bool? addPlayer1 = game.AddPlayer(player1);
 		bool? addPlayer2 = game.AddPlayer(player2);
-		
-		Console.WriteLine($"Add player status: {addPlayer1}");
 		Console.WriteLine($"Add player status: {addPlayer2}");
 	}
 	
@@ -104,16 +98,20 @@ class Program
 		}
 	}
 	
-	static void PieceInit(GameRunner game)
+	static void CheckPiece(GameRunner game)
 	{
-		bool check = game.InitializingPiece();
-		if(check)
+		Dictionary<IPlayer, List<Piece>> piecesList = game.GetPlayerPieces();
+		foreach(var pieces in piecesList)
 		{
-			Console.WriteLine("Piece initializing success");
-		}
-		else
-		{
-			Console.WriteLine("Please Re-check");
+			IPlayer playerName = pieces.Key;
+			if(piecesList.TryGetValue(playerName, out List<Piece> playerPiece))
+			{
+				foreach(Piece piece in playerPiece)
+				{
+					Console.WriteLine($"{playerName.GetName()}, {piece.Type()}");
+				}
+			}
+			Console.WriteLine();
 		}
 	}
 }
