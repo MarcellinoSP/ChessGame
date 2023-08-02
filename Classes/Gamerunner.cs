@@ -139,10 +139,20 @@ public class GameRunner
 		{
 			foreach (var playerPieces in _piecesList.Values)	//ini cek di dalam list
 			{
-				Piece piece = playerPieces.FirstOrDefault(pieceType => pieceType.Type() == type);
-				piece.SetRank(rank);
-				piece.SetFiles(files);
-				return true;
+				// Piece piece = playerPieces.FirstOrDefault(pieceType => pieceType.Type() == type); //Kalo pake ini ngebug di black piece
+				foreach(var pieceToMove in playerPieces)
+				{
+					if(pieceToMove.Type() == type)
+					{
+						pieceToMove.SetRank(rank);
+						pieceToMove.SetFiles(files);
+						return true;
+					}
+				}
+				// Console.WriteLine(piece.Type());
+				// piece.SetRank(rank);
+				// piece.SetFiles(files);
+				// return true;
 			}
 		}
 		return false;
@@ -181,7 +191,7 @@ public class GameRunner
 			foreach(var pieceList in pieces)
 			{
 				bool status = pieceList.GetStatus();
-				Console.WriteLine(pieceList.Type());
+				// Console.WriteLine(pieceList.Type());
 				if(status)
 				{
 					Console.WriteLine($"Piece to remove: {pieceList.Type()}");
@@ -195,6 +205,7 @@ public class GameRunner
 	
 	public bool KingCheckStatus()
 	{
+		
 		return true;
 	}
 	

@@ -11,10 +11,10 @@ class Program
 		PieceInitializing(chessGame);
 		DrawBoard(chessGame);
 		
-		chessGame.Move("K1", 0, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG
+		chessGame.Move("k1", 7, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG //Sekarang bug di black piece //BUG FIXED
 		DrawBoard(chessGame);
-		chessGame.Move("K1", 4, 0);
-		CheckPiece(chessGame);
+		chessGame.Move("k1", 4, 3);
+		// CheckPiece(chessGame);
 		DrawBoard(chessGame);				//New Bug = piece ngga ke capture //UPDATE: BUG FIXED
 	}
 	
