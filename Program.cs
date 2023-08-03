@@ -9,15 +9,22 @@ class Program
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
 		PieceInitializing(chessGame);
+		
+		chessGame.Move("K1", 3, 7);
+		chessGame.Move("r1", 3, 4);
+		// chessGame.Move("q1", 5, 7);
 		DrawBoard(chessGame);
 		
-		chessGame.Move("p1", 7, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG //Sekarang bug di black piece //BUG FIXED
-		DrawBoard(chessGame);
-		chessGame.Move("p1", 4, 3);
-		// CheckPiece(chessGame);
-		DrawBoard(chessGame);				//New Bug = piece ngga ke capture //UPDATE: BUG FIXED
+		bool check = chessGame.KingCheckStatus();
+		Console.WriteLine($"King checked condition: {check}");
 		
-		GameStatus(chessGame);
+		// chessGame.Move("p1", 7, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG //Sekarang bug di black piece //BUG FIXED
+		// DrawBoard(chessGame);
+		// chessGame.Move("p1", 4, 3);
+		// // CheckPiece(chessGame);
+		// DrawBoard(chessGame);				//New Bug = piece ngga ke capture //UPDATE: BUG FIXED
+		
+		// GameStatus(chessGame);
 	}
 	//Drawing Board Method
 	

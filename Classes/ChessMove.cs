@@ -28,21 +28,6 @@ public class ChessMove
 
 public class PawnMoveSingle : IMoveSet
 {
-	//DOES NOT IMPLEMENT IENUMERABLE (PIE TO KIIII)
-	// public List<Position> pieceMovement(Position currentPosition)
-	// {
-	// 	int currentRank = currentPosition.GetRank();
-	// 	int currentFiles = currentPosition.GetFiles();
-		
-	// 	List<Position> availableMove = new List<Position>();
-		
-	// 	for(int i = 1; i < 7; i++)
-	// 	{
-	// 		availableMove.Add(new Position {currentFiles + 1});
-	// 	}
-	// 	return availableMove;
-	// }
-	
 	public Position PieceMove()
 	{
 		Position position = new();
@@ -51,63 +36,112 @@ public class PawnMoveSingle : IMoveSet
 		for(int i = 1; i < 8; i++)
 		{
 			currentRank += i;
+			position.SetRank(currentRank);
 		}
 		return position;
 	}
 }
 
-// public class PawnMoveDouble : IMoveSet
-// {
-// 	public Position PieceMove()
-// 	{
-// 		return new Position();
-// 	}
-// }
+public class PawnMoveDouble : IMoveSet
+{
+	public Position PieceMove()
+	{
+		Position position = new();
+		int currentRank = position.GetRank();
+		int currentFiles = position.GetFiles();
+		for(int i = 1; i < 8; i++)
+		{
+			currentRank += 2;
+			position.SetRank(currentRank);
+		}
+		return position;
+	}
+}
 
-// public class PawnEnPassant : IMoveSet
-// {
-// 	public Position PieceMove()
-// 	{
-// 		return new Position();
-// 	}
-// }
+public class PawnEnPassant : IMoveSet
+{
+	public Position PieceMove()
+	{
+		Position position = new();
+		int currentRank = position.GetRank();
+		int currentFiles = position.GetFiles();
+		currentRank += 1;
+		currentFiles += 1;
+		position.SetRank(currentRank);
+		position.SetFiles(currentFiles);
+		return position;
+	}
+}
 
-// public class KnightMoveSet : IMoveSet
-// {
-// 	public Position PieceMove()
-// 	{
-// 		return new Position();
-// 	}
-// }
+public class KnightMoveSet : IMoveSet	//INI KAYAE BUTUH LIST, KARENA MOVEMENT NYA 2 JENIS
+{
+	public Position PieceMove()
+	{
+		Position position = new();
+		int currentRank = position.GetRank();
+		int currentFiles = position.GetFiles();
+		
+		return position;
+	}
+}
 
-// public class BishopMoveSet : IMoveSet
-// {
-// 	public Position PieceMove()
-// 	{
-// 		return new Position();
-// 	}
-// }
+public class BishopMoveSet : IMoveSet
+{
+	public Position PieceMove()
+	{
+		Position position = new();
+		int currentRank = position.GetRank();
+		int currentFiles = position.GetFiles();
+		for(int i = 0; i < 7; i++)
+		{
+			currentFiles += 1;
+			currentRank += 1;
+		}
+		return position;
+	}
+}
 
-// public class QueenMoveSet : IMoveSet
-// {
-// 	public Position PieceMove()
-// 	{
-// 		return new Position();
-// 	}
-// }
+public class QueenMoveSet : IMoveSet		//INI KAYAE JUGA BUTUH LIST
+{
+	public Position PieceMove()
+	{
+		Position position = new();
+		int currentRank = position.GetRank();
+		int currentFiles = position.GetFiles();
+		
+		return position;
+	}
+}
 
-// public class KingMoveSet : IMoveSet
-// {
-// 	public Position PieceMove()
-// 	{
-// 		return new Position();
-// 	}
-// }
+public class KingMoveSet : IMoveSet
+{
+	public Position PieceMove()
+	{
+		Position position = new();
+		int currentRank = position.GetRank();
+		int currentFiles = position.GetFiles();
+		for(int i = 1; i < 8; i++)
+		{
+			currentRank += i;
+			currentFiles += i;
+			position.SetRank(currentRank);
+			position.SetFiles(currentFiles);
+		}
+		return position;
+	}
+}
 
-// public class KingCastling : IMoveSet
-// {
-// 	public Position PieceMove()
-// 	{
-// 		return new Position();
-// 	}
-// }
+public class KingCastling : IMoveSet
+{
+	public Position PieceMove()
+	{
+		Position position = new();
+		int currentRank = position.GetRank();
+		int currentFiles = position.GetFiles();
+		currentFiles += 2;
+		currentFiles -= 2;
+		position.SetFiles(currentFiles);
+		position.SetFiles(currentFiles);
+		return position;
+	}
+}

@@ -139,19 +139,16 @@ public class GameRunner
 			foreach (var playerPieces in _piecesList.Values)	//ini cek di dalam list
 			{
 				// Piece piece = playerPieces.FirstOrDefault(pieceType => pieceType.Type() == type); //Kalo pake ini ngebug di black piece
-				foreach(var pieceToMove in playerPieces)
+				foreach(var piece in playerPieces)
 				{
-					if(pieceToMove.Type() == type)
+					// Console.WriteLine(piece.Type());
+					if(piece.Type() == type)
 					{
-						pieceToMove.SetRank(rank);
-						pieceToMove.SetFiles(files);
+						piece.SetRank(rank);
+						piece.SetFiles(files);
 						return true;
 					}
 				}
-				// Console.WriteLine(piece.Type());
-				// piece.SetRank(rank);
-				// piece.SetFiles(files);
-				// return true;
 			}
 		}
 		return false;
@@ -213,16 +210,53 @@ public class GameRunner
 		return false;
 	}
 	
-	public bool KingCheckStatus()
+	// public bool KingCheckStatus()
+	// {
+		
+	// 	return true;
+	// }
+	
+	public bool KingCheckStatus() //LOGIC DIBAWAH MASIH JELEK, BETTER DI ASOSIASI DENGAN MOVEMENT
 	{
-		// foreach(var pieces in _piecesList)
-		// {
-		// 	foreach(var piece in pieces)
-		// 	{
-		// 		if(piece.Type())
-		// 	}
-		// }
-		return true;
+		int kingRank = 0;
+		int kingFiles = 0;
+		int boardSize = 8;
+		foreach(var pieceList in _piecesList.Values)
+		{
+			foreach(var piece in pieceList)
+			{
+				if(piece.Type() == "K1")
+				{
+					kingRank = piece.GetRank();
+					kingFiles = piece.GetFiles();
+				}
+			}
+		}
+		foreach(var pieceList in _piecesList.Values)
+		{
+			foreach(var piece in pieceList)
+			{
+				if(piece.GetFiles() == kingFiles)
+				{
+					switch(piece.Type())
+					{
+						case "r1":
+							Console.WriteLine($"Checked by {piece.Type()}!");
+							return true;
+							break;
+						case "r2":
+							Console.WriteLine($"Checked by {piece.Type()}!");
+							return true;
+							break;
+						case "q1":
+							Console.WriteLine($"Checked by {piece.Type()}!");
+							return true;
+							break;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	public bool PawnPromotion(Piece piece, PromoteTo promoteTo)
