@@ -45,14 +45,14 @@ public class PawnMoveSingle : IMoveSet
 	
 	public Position PieceMove()
 	{
-		// Position position = new();
-		// int currentRank = position.GetRank();
-		// int currentFiles = position.GetFiles();
-		// for(int i = 1; i < 8; i++)
-		// {
-		// 	currentFiles += i;
-		// }
-		return new Position();
+		Position position = new();
+		int currentRank = position.GetRank();
+		int currentFiles = position.GetFiles();
+		for(int i = 1; i < 8; i++)
+		{
+			currentRank += i;
+		}
+		return position;
 	}
 }
 

@@ -112,7 +112,7 @@ public class GameRunner
 		return true;
 	}
 	
-	public Piece CheckPiece(int rank, int files)
+	public Piece? CheckPiece(int rank, int files)
 	{
    		foreach (var playerPieces in _piecesList.Values)
    		{

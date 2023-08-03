@@ -3,7 +3,7 @@ public abstract class Piece
 {
 	protected bool captured;
 	protected Position position;
-	protected string _pieceType;
+	protected string? _pieceType;
 	
 	public Piece()
 	{
