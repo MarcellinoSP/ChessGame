@@ -1,8 +1,16 @@
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+
 namespace ChessGame;
+
+[DataContract]
 public abstract class Piece
 {
+	
 	protected bool captured;
+	[DataMember]
 	protected Position position;
+	[DataMember]
 	protected string? _pieceType;
 	
 	public Piece()

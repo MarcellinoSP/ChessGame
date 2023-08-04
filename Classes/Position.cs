@@ -1,7 +1,13 @@
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+
 namespace ChessGame;
+[DataContract]
 public class Position
 {
+	[DataMember]
 	private int _rank;
+	[DataMember]
 	private int _files;
 	
 	public bool SetRank(int rank)

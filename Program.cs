@@ -5,6 +5,9 @@ class Program
 {
 	static void Main()
 	{
+		PieceList listAdd = new();
+		listAdd.AddWhitePiece();
+		listAdd.GenerateJSON();
 		GameRunner chessGame = new();
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
