@@ -30,6 +30,11 @@ class Program
 		chessGame.SwitchTurn();
 		IPlayer player2 = chessGame.GetCurrentTurn();
 		Console.WriteLine(player2.GetName());
+
+		ChessMove movement = new();
+		// Pawn pawn = new(1, 1, "P10");
+		// // movement.GetMoveSet(pawn);
+		// Position position = movement.GetMoveSet(pawn);
 		
 		// chessGame.Move("p1", 7, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG //Sekarang bug di black piece //BUG FIXED
 		// DrawBoard(chessGame);

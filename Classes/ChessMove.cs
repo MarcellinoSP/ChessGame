@@ -8,7 +8,7 @@ public class ChessMove
 	{
 		_moveSet = new Dictionary<Piece, IMoveSet>();
 	}
-	public bool AddPiece(KeyValuePair<Piece, IMoveSet> addPiece)
+	public bool AddPiece(KeyValuePair<Piece, IMoveSet> addPiece)	//KALAU LANGSUNG DI ASSIGN?
 	{
 		return true;
 	}
@@ -22,7 +22,15 @@ public class ChessMove
 	public IMoveSet GetMoveSet(Piece piece)
 	{
 		//KEMUNGKINAN PAKAI SWITCH CASE
-		return _moveSet[piece];
+		Piece pieceInCheck = piece;
+		switch(pieceInCheck.Type())
+		{
+				case("P10"):
+					PawnMoveSingle pawnMoveSingle = new();
+					return pawnMoveSingle;
+					break;
+		}
+		return null;
 	}
 }
 
@@ -33,11 +41,7 @@ public class PawnMoveSingle : IMoveSet
 		Position position = new();
 		int currentRank = position.GetRank();
 		int currentFiles = position.GetFiles();
-		for(int i = 1; i < 8; i++)
-		{
-			currentRank += i;
-			position.SetRank(currentRank);
-		}
+		position.SetRank(currentRank += 1);
 		return position;
 	}
 }

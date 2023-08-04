@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Json;
 namespace ChessGame;
 
 [DataContract]
+//ABSTRACT DIBENERIN BIAR METHOD NYA ABSTRACT SEMUA
 public abstract class Piece
 {
 	
