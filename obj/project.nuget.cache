@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9UMUrdRti7oyPsq9yXGsmYtJGzRF7TPPkGpFo9k1iCXJOF7RveR8q7vRJVAl2TgGB0Rk5A7jamwstYweehxD6A==",
+  "dgSpecHash": "SOjQ/5LQh9lnjUz904rg4T8pFIInNOwb7anxK0CvxOx4NKDvrE7crY5UehSGKpDwbEdiVbs+G2ckZ+a7EyZyaQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Batch 3\\Documents\\Bootcamp New\\ChessGame\\Chess Game.csproj",
+  "projectFilePath": "/workspaces/ChessGame/Chess Game.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

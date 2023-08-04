@@ -4,7 +4,7 @@ public class GameRunner
 {
 	private IBoard _chessBoard;
 	private ChessMove _movementLibrary;
-	private IPlayer _currentTurn;
+	private PlayerColor _currentTurn;
 	private Dictionary<IPlayer, PlayerColor> _playerList;
 	private Dictionary<IPlayer, List<Piece>> _piecesList;
 	private GameStatus _gameStatus;
@@ -14,6 +14,7 @@ public class GameRunner
 		_chessBoard = new ChessBoard();
 		_playerList = new Dictionary<IPlayer, PlayerColor>();
 		_piecesList = new Dictionary<IPlayer, List<Piece>>();
+		_currentTurn = PlayerColor.WHITE;
 	}
 	
 	public bool? AddPlayer(IPlayer player)
@@ -60,7 +61,7 @@ public class GameRunner
 		return _piecesList;
 	}
 	
-	public bool InitializePieces()
+	public bool InitializePieces()		//DIUBAH PAKE JSON BIAR SIMPEL
 	{
 		int i = 0;
 		foreach(var player in _playerList.Keys)
@@ -210,12 +211,6 @@ public class GameRunner
 		return false;
 	}
 	
-	// public bool KingCheckStatus()
-	// {
-		
-	// 	return true;
-	// }
-	
 	public bool KingCheckStatus() //LOGIC DIBAWAH MASIH JELEK, BETTER DI ASOSIASI DENGAN MOVEMENT
 	{
 		int kingRank = 0;
@@ -273,5 +268,22 @@ public class GameRunner
 	public GameStatus CheckGameStatus()
 	{
 		return _gameStatus;
+	}
+
+	public void SwitchTurn()
+	{
+		_currentTurn = (_currentTurn == PlayerColor.WHITE) ? PlayerColor.BLACK : PlayerColor.WHITE;
+	}
+
+	public IPlayer GetCurrentTurn()
+	{
+		foreach(KeyValuePair<IPlayer, PlayerColor> playerTurn in _playerList)
+		{
+			if(playerTurn.Value == _currentTurn)
+			{
+				return playerTurn.Key;
+			}
+		}
+		return null;
 	}
 }

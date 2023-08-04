@@ -6,9 +6,9 @@ class Program
 	static void Main()
 	{
 		PieceList listAdd = new();
-		listAdd.AddWhitePiece();
-		listAdd.GenerateJSON();
-		GameRunner chessGame = new();
+		// listAdd.AddWhitePiece();
+		// listAdd.GenerateJSON();
+		GameRunner chessGame = new GameRunner();
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
 		PieceInitializing(chessGame);
@@ -17,9 +17,19 @@ class Program
 		chessGame.Move("r1", 3, 4);
 		// chessGame.Move("q1", 5, 7);
 		DrawBoard(chessGame);
+
 		
 		bool check = chessGame.KingCheckStatus();
 		Console.WriteLine($"King checked condition: {check}");
+
+		IPlayer player = chessGame.GetCurrentTurn();
+		Console.WriteLine(player.GetName());
+		chessGame.SwitchTurn();
+		IPlayer player1 = chessGame.GetCurrentTurn();
+		Console.WriteLine(player1.GetName());
+		chessGame.SwitchTurn();
+		IPlayer player2 = chessGame.GetCurrentTurn();
+		Console.WriteLine(player2.GetName());
 		
 		// chessGame.Move("p1", 7, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG //Sekarang bug di black piece //BUG FIXED
 		// DrawBoard(chessGame);
@@ -89,6 +99,11 @@ class Program
 			
 			Console.WriteLine($"Currently playing: {playerName.GetName()} as {color}");
 		}
+	}
+
+	static void PlayerTurn(GameRunner game)
+	{
+		Dictionary<IPlayer, PlayerColor> playerList = game.GetPlayerList(); 
 	}
 	
 	static void PieceInitializing(GameRunner game)
