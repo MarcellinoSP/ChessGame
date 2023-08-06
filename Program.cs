@@ -11,12 +11,13 @@ class Program
 		PlayerList(chessGame);
 		PieceInitializing(chessGame);
 		
-		chessGame.Move("P5", 5, 4);
-		GetAvailableMove(chessGame, "P5");
-		chessGame.Move("Q1", 5, 5);
-		chessGame.Move("K1", 7, 2);
-		// chessGame.Move("r1", 3, 4);
-		// chessGame.Move("q1", 5, 7);
+		// chessGame.Move("P5", 5, 4);
+		GetAvailableMove(chessGame, "r1");
+		// chessGame.Move("Q1", 5, 5);
+		// chessGame.Move("K1", 7, 3);
+		chessGame.Move("r1", 7, 0);
+		chessGame.Move("q1", 3, 0);
+		// chessGame.Move("q1", 0, 0);
 		DrawBoard(chessGame);
 		
 		

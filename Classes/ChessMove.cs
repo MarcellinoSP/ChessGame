@@ -121,16 +121,16 @@ public class RookMoveSet : IMoveSet
 		int rank = piece.GetRank();
 		int files = piece.GetFiles();
 		
-		for(int i = 1; i < 7; i ++)
+		for(int i = 1; i <= 7; i ++)
 		{
 			availablePosition.Add(new Position(rank + i, files));
-			availablePosition.Add(new Position(rank + i, files));
+			availablePosition.Add(new Position(rank - i, files));
 			availablePosition.Add(new Position(rank, files + i));
 			availablePosition.Add(new Position(rank, files - i));
 		}
 		
 		//Filter unnecessary position
-		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 8 || move.GetRank() > 8 || move.GetFiles() < 0);
 		return availablePosition;
 	}
 }
@@ -143,7 +143,7 @@ public class BishopMoveSet : IMoveSet		//DONE
 		int rank = piece.GetRank();
 		int files = piece.GetFiles();
 		
-		for(int i = 1; i < 7; i++)
+		for(int i = 1; i <= 7; i++)
 		{
 			availablePosition.Add(new Position(rank + i, files + i));
 			availablePosition.Add(new Position(rank - i, files - i));
@@ -152,7 +152,7 @@ public class BishopMoveSet : IMoveSet		//DONE
 		}
 		
 		//Filter unnecessary position
-		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 8 || move.GetRank() > 8 || move.GetFiles() < 0);
 		return availablePosition;
 	}
 }
@@ -165,7 +165,7 @@ public class QueenMoveSet : IMoveSet		//DONE
 		int rank = piece.GetRank();
 		int files = piece.GetFiles();
 		
-		for(int i = 1; i < 7; i++)
+		for(int i = 1; i <= 7; i++)
 		{
 			availablePosition.Add(new Position(rank + i, files + i));
 			availablePosition.Add(new Position(rank - i, files - i));
@@ -178,7 +178,7 @@ public class QueenMoveSet : IMoveSet		//DONE
 		}
 
 		//Filter unnecessary position
-		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 8 || move.GetRank() > 8 || move.GetFiles() < 0);
 		return availablePosition;
 	}
 }
