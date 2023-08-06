@@ -156,16 +156,25 @@ public class GameRunner
 		bool occupied = IsOccupied(pieceID, rank, files);
 		if(!occupied)
 		{
-			foreach (var playerPieces in _piecesList.Values)	//ini cek di dalam list
+			foreach (var playerPieces in _piecesList.Values)
 			{
-				// Piece piece = playerPieces.FirstOrDefault(pieceType => pieceType.Type() == type); //Kalo pake ini ngebug di black piece
 				foreach(var piece in playerPieces)
 				{
 					if(piece.ID() == pieceID)
-					{
-						piece.SetRank(rank);
-						piece.SetFiles(files);
-						return true;
+					{											
+						//MUNGKIN TAMBAH CHECK AVAILABLE MOVE DISINI
+						List<Position> positionAvailable = GetPieceAvailableMove(piece);
+						foreach(var position in positionAvailable)
+						{
+							Console.WriteLine(piece.ID());
+							if(position.GetRank() == rank && position.GetFiles() == files)
+							{
+								piece.SetRank(rank);
+								piece.SetFiles(files);
+								return true;
+							}
+						}
+						return false;
 					}
 				}
 			}
@@ -208,19 +217,6 @@ public class GameRunner
 				bool status = pieceList.GetStatus();
 				if(status)
 				{
-					Console.WriteLine($"Piece to remove: {pieceList.ID()}");
-					if(pieceList.ID() == "K1")
-					{
-						SetGameStatus(GameStatus.BLACK_WIN);
-					}
-					else if(pieceList.ID() == "k1")
-					{
-						SetGameStatus(GameStatus.WHITE_WIN);
-					}
-					else
-					{
-						SetGameStatus(GameStatus.ONGOING);
-					}
 					pieces.Remove(piece);
 					return true;
 				}

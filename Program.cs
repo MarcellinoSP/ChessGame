@@ -6,19 +6,19 @@ class Program
 	static void Main()
 	{
 		PieceList listAdd = new();
-		// listAdd.AddWhitePiece();
-		// listAdd.GenerateJSON();
 		GameRunner chessGame = new GameRunner();
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
 		PieceInitializing(chessGame);
 		
-		chessGame.Move("K1", 6, 4);
-		chessGame.Move("r1", 3, 4);
+		chessGame.Move("P5", 5, 4);
+		GetAvailableMove(chessGame, "P5");
+		chessGame.Move("Q1", 5, 5);
+		chessGame.Move("K1", 7, 2);
+		// chessGame.Move("r1", 3, 4);
 		// chessGame.Move("q1", 5, 7);
 		DrawBoard(chessGame);
 		
-		GetAvailableMove(chessGame, "q1");
 		
 		//TRIAL KING CHECK STATUS
 		bool check = chessGame.KingCheckStatus();

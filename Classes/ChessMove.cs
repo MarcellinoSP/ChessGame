@@ -172,7 +172,7 @@ public class QueenMoveSet : IMoveSet		//DONE
 			availablePosition.Add(new Position(rank + i, files - i));
 			availablePosition.Add(new Position(rank - i, files + i));
 			availablePosition.Add(new Position(rank + i, files));
-			availablePosition.Add(new Position(rank + i, files));
+			availablePosition.Add(new Position(rank - i, files));
 			availablePosition.Add(new Position(rank, files + i));
 			availablePosition.Add(new Position(rank, files - i));
 		}
