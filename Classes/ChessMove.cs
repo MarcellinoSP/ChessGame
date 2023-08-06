@@ -1,12 +1,17 @@
 namespace ChessGame;
 public class ChessMove
 {
-	private Dictionary <Piece, IMoveSet> _moveSet;
+	private Dictionary <Piece, IMoveSet> _moveSet = new Dictionary<Piece, IMoveSet>();
 	private int _moveBoundary;
 	
 	public ChessMove()
 	{
-		_moveSet = new Dictionary<Piece, IMoveSet>();
+		_moveSet.Add(new Pawn("Pawn"), new PawnMoveSingle());
+		_moveSet.Add(new Knight("Knight"), new KnightMoveSet());
+		_moveSet.Add(new Rook("Rook"), new RookMoveSet());
+		_moveSet.Add(new Bishop("Bishop"), new BishopMoveSet());
+		_moveSet.Add(new Queen("Queen"), new QueenMoveSet());
+		_moveSet.Add(new King("King"), new KingMoveSet());
 	}
 	public bool AddPiece(KeyValuePair<Piece, IMoveSet> addPiece)	//KALAU LANGSUNG DI ASSIGN?
 	{
@@ -21,131 +26,197 @@ public class ChessMove
 	
 	public IMoveSet GetMoveSet(Piece piece)
 	{
-		//KEMUNGKINAN PAKAI SWITCH CASE
-		Piece pieceInCheck = piece;
-		switch(pieceInCheck.Type())
+		foreach(KeyValuePair <Piece, IMoveSet> moveCoordinateList in _moveSet)
 		{
-				case("P10"):
-					PawnMoveSingle pawnMoveSingle = new();
-					return pawnMoveSingle;
-					break;
+			var pieces = moveCoordinateList.Key;
+			var moveSet = moveCoordinateList.Value;
+			if(pieces.Type() == piece.Type())
+			{
+				// Console.WriteLine(moveSet);
+				return moveSet;
+			}
 		}
 		return null;
 	}
 }
 
-public class PawnMoveSingle : IMoveSet
+public class PawnMoveSingle : IMoveSet		//DONE, BUT NOT YET TESTED
 {
-	public Position PieceMove()
+	public List<Position> movement(Piece piece)
 	{
-		Position position = new();
-		int currentRank = position.GetRank();
-		int currentFiles = position.GetFiles();
-		position.SetRank(currentRank += 1);
-		return position;
-	}
-}
-
-public class PawnMoveDouble : IMoveSet
-{
-	public Position PieceMove()
-	{
-		Position position = new();
-		int currentRank = position.GetRank();
-		int currentFiles = position.GetFiles();
-		for(int i = 1; i < 8; i++)
-		{
-			currentRank += 2;
-			position.SetRank(currentRank);
-		}
-		return position;
-	}
-}
-
-public class PawnEnPassant : IMoveSet
-{
-	public Position PieceMove()
-	{
-		Position position = new();
-		int currentRank = position.GetRank();
-		int currentFiles = position.GetFiles();
-		currentRank += 1;
-		currentFiles += 1;
-		position.SetRank(currentRank);
-		position.SetFiles(currentFiles);
-		return position;
-	}
-}
-
-public class KnightMoveSet : IMoveSet	//INI KAYAE BUTUH LIST, KARENA MOVEMENT NYA 2 JENIS
-{
-	public Position PieceMove()
-	{
-		Position position = new();
-		int currentRank = position.GetRank();
-		int currentFiles = position.GetFiles();
+		List<Position> availablePosition = new List<Position>();
+		int rank = piece.GetRank();
+		int files = piece.GetFiles();
 		
-		return position;
-	}
-}
-
-public class BishopMoveSet : IMoveSet
-{
-	public Position PieceMove()
-	{
-		Position position = new();
-		int currentRank = position.GetRank();
-		int currentFiles = position.GetFiles();
-		for(int i = 0; i < 7; i++)
+		if(piece.ID().Any(Char.IsUpper))
 		{
-			currentFiles += 1;
-			currentRank += 1;
+			availablePosition.Add(new Position(rank - 1, files));
 		}
-		return position;
+		else
+		{
+			availablePosition.Add(new Position(rank + 1, files));
+		}
+
+		//Filter unnecessary position
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		return availablePosition;
 	}
 }
 
-public class QueenMoveSet : IMoveSet		//INI KAYAE JUGA BUTUH LIST
+// public class PawnMoveDouble : IMoveSet
+// {
+// 	public Position pieceMove()
+// 	{
+// 		Position position = new();
+// 		int currentRank = position.GetRank();
+// 		int currentFiles = position.GetFiles();
+// 		for(int i = 1; i < 8; i++)
+// 		{
+// 			currentRank += 2;
+// 			position.SetRank(currentRank);
+// 		}
+// 		return position;
+// 	}
+// }
+
+// public class PawnEnPassant : IMoveSet
+// {
+// 	public Position pieceMove()
+// 	{
+// 		Position position = new();
+// 		int currentRank = position.GetRank();
+// 		int currentFiles = position.GetFiles();
+// 		currentRank += 1;
+// 		currentFiles += 1;
+// 		position.SetRank(currentRank);
+// 		position.SetFiles(currentFiles);
+// 		return position;
+// 	}
+// }
+
+public class KnightMoveSet : IMoveSet		//DONE
 {
-	public Position PieceMove()
+	public List<Position> movement(Piece piece)
 	{
-		Position position = new();
-		int currentRank = position.GetRank();
-		int currentFiles = position.GetFiles();
+		List<Position> availablePosition = new List<Position>();
+		int rank = piece.GetRank();
+		int files = piece.GetFiles();
 		
-		return position;
+		availablePosition.Add(new Position(rank + 1, files + 2));
+		availablePosition.Add(new Position(rank - 1, files - 2));
+		availablePosition.Add(new Position(rank + 1, files - 2));
+		availablePosition.Add(new Position(rank - 1, files + 2));
+		
+		//Filter unnecessary position
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		return availablePosition;
 	}
 }
 
-public class KingMoveSet : IMoveSet
+public class RookMoveSet : IMoveSet
 {
-	public Position PieceMove()
+	public List<Position> movement(Piece piece)
 	{
-		Position position = new();
-		int currentRank = position.GetRank();
-		int currentFiles = position.GetFiles();
-		for(int i = 1; i < 8; i++)
+		List<Position> availablePosition = new List<Position>();
+		int rank = piece.GetRank();
+		int files = piece.GetFiles();
+		
+		for(int i = 1; i < 7; i ++)
 		{
-			currentRank += i;
-			currentFiles += i;
-			position.SetRank(currentRank);
-			position.SetFiles(currentFiles);
+			availablePosition.Add(new Position(rank + i, files));
+			availablePosition.Add(new Position(rank + i, files));
+			availablePosition.Add(new Position(rank, files + i));
+			availablePosition.Add(new Position(rank, files - i));
 		}
-		return position;
+		
+		//Filter unnecessary position
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		return availablePosition;
 	}
 }
 
-public class KingCastling : IMoveSet
+public class BishopMoveSet : IMoveSet		//DONE
 {
-	public Position PieceMove()
+	public List<Position> movement(Piece piece)
 	{
-		Position position = new();
-		int currentRank = position.GetRank();
-		int currentFiles = position.GetFiles();
-		currentFiles += 2;
-		currentFiles -= 2;
-		position.SetFiles(currentFiles);
-		position.SetFiles(currentFiles);
-		return position;
+		List<Position> availablePosition = new List<Position>();
+		int rank = piece.GetRank();
+		int files = piece.GetFiles();
+		
+		for(int i = 1; i < 7; i++)
+		{
+			availablePosition.Add(new Position(rank + i, files + i));
+			availablePosition.Add(new Position(rank - i, files - i));
+			availablePosition.Add(new Position(rank + i, files - i));
+			availablePosition.Add(new Position(rank - i, files + i));
+		}
+		
+		//Filter unnecessary position
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		return availablePosition;
 	}
 }
+
+public class QueenMoveSet : IMoveSet		//DONE
+{
+	public List<Position> movement(Piece piece)
+	{
+		List<Position> availablePosition = new List<Position>();
+		int rank = piece.GetRank();
+		int files = piece.GetFiles();
+		
+		for(int i = 1; i < 7; i++)
+		{
+			availablePosition.Add(new Position(rank + i, files + i));
+			availablePosition.Add(new Position(rank - i, files - i));
+			availablePosition.Add(new Position(rank + i, files - i));
+			availablePosition.Add(new Position(rank - i, files + i));
+			availablePosition.Add(new Position(rank + i, files));
+			availablePosition.Add(new Position(rank + i, files));
+			availablePosition.Add(new Position(rank, files + i));
+			availablePosition.Add(new Position(rank, files - i));
+		}
+
+		//Filter unnecessary position
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		return availablePosition;
+	}
+}
+
+public class KingMoveSet : IMoveSet			//DONE, BUT NOT YET TESTED
+{
+	public List<Position> movement(Piece piece)
+	{
+		List<Position> availablePosition = new List<Position>();
+		int rank = piece.GetRank();
+		int files = piece.GetFiles();
+		
+		availablePosition.Add(new Position(rank + 1, files + 1));
+		availablePosition.Add(new Position(rank - 1, files - 1));
+		availablePosition.Add(new Position(rank + 1, files - 1));
+		availablePosition.Add(new Position(rank - 1, files + 1));
+		availablePosition.Add(new Position(rank + 1, files));
+		availablePosition.Add(new Position(rank - 1, files));
+		availablePosition.Add(new Position(rank, files + 1));
+		availablePosition.Add(new Position(rank, files - 1));
+
+		//Filter unnecessary position
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
+		return availablePosition;
+	}
+}
+
+// public class KingCastling : IMoveSet
+// {
+// 	public Position pieceMove()
+// 	{
+// 		Position position = new();
+// 		int currentRank = position.GetRank();
+// 		int currentFiles = position.GetFiles();
+// 		currentFiles += 2;
+// 		currentFiles -= 2;
+// 		position.SetFiles(currentFiles);
+// 		position.SetFiles(currentFiles);
+// 		return position;
+// 	}
+// }

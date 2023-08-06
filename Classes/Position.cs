@@ -10,6 +10,17 @@ public class Position
 	[DataMember]
 	private int _files;
 	
+	public Position(int rank, int files)
+	{
+		_rank = rank;
+		_files = files;
+	}
+	
+	public Position()
+	{
+		
+	}
+	
 	public bool SetRank(int rank)
 	{
 		_rank = rank;

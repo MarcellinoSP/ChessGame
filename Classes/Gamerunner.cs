@@ -3,7 +3,7 @@ namespace ChessGame;
 public class GameRunner
 {
 	private IBoard _chessBoard;
-	private ChessMove _movementLibrary;
+	private ChessMove _chessMove;
 	private PlayerColor _currentTurn;
 	private Dictionary<IPlayer, PlayerColor> _playerList;
 	private Dictionary<IPlayer, List<Piece>> _piecesList;
@@ -14,7 +14,15 @@ public class GameRunner
 		_chessBoard = new ChessBoard();
 		_playerList = new Dictionary<IPlayer, PlayerColor>();
 		_piecesList = new Dictionary<IPlayer, List<Piece>>();
+		_chessMove = new ChessMove();
 		_currentTurn = PlayerColor.WHITE;
+	}
+	
+	public List<Position> GetPieceAvailableMove(Piece piece)
+	{
+		IMoveSet moveSet = _chessMove.GetMoveSet(piece);
+		List<Position> pieceMovement = moveSet.movement(piece);
+		return pieceMovement;
 	}
 	
 	public bool? AddPlayer(IPlayer player)
@@ -69,44 +77,44 @@ public class GameRunner
 			List <Piece> pieces = new List<Piece>();
 			if(i == 0)
 			{
-				pieces.Add(new Pawn (6, 0, "P1"));
-				pieces.Add(new Pawn (6, 1, "P2"));
-				pieces.Add(new Pawn (6, 2, "P3"));
-				pieces.Add(new Pawn (6, 3, "P4"));
-				pieces.Add(new Pawn (6, 4, "P5"));
-				pieces.Add(new Pawn (6, 5, "P6"));
-				pieces.Add(new Pawn (6, 6, "P7"));
-				pieces.Add(new Pawn (6, 7, "P8"));
+				pieces.Add(new Pawn (6, 0, "Pawn", "P1"));
+				pieces.Add(new Pawn (6, 1, "Pawn", "P2"));
+				pieces.Add(new Pawn (6, 2, "Pawn", "P3"));
+				pieces.Add(new Pawn (6, 3, "Pawn", "P4"));
+				pieces.Add(new Pawn (6, 4, "Pawn", "P5"));
+				pieces.Add(new Pawn (6, 5, "Pawn", "P6"));
+				pieces.Add(new Pawn (6, 6, "Pawn", "P7"));
+				pieces.Add(new Pawn (6, 7, "Pawn", "P8"));
 				
-				pieces.Add(new Rook (7, 0, "R1"));
-				pieces.Add(new Knight (7, 1, "N1"));
-				pieces.Add(new Bishop (7, 2, "B1"));
-				pieces.Add(new Queen (7, 3, "Q1"));
-				pieces.Add(new King (7, 4, "K1"));
-				pieces.Add(new Bishop (7, 5, "B2"));
-				pieces.Add(new Knight (7, 6, "N2"));
-				pieces.Add(new Rook (7, 7, "R2"));
+				pieces.Add(new Rook (7, 0, "Rook", "R1"));
+				pieces.Add(new Knight (7, 1, "Knight", "N1"));
+				pieces.Add(new Bishop (7, 2, "Bishop", "B1"));
+				pieces.Add(new Queen (7, 3, "Queen", "Q1"));
+				pieces.Add(new King (7, 4, "King", "K1"));
+				pieces.Add(new Bishop (7, 5, "Bishop", "B2"));
+				pieces.Add(new Knight (7, 6, "Knight", "N2"));
+				pieces.Add(new Rook (7, 7, "Rook", "R2"));
 				i++;
 			}
 			else
 			{
-				pieces.Add(new Pawn (1, 0, "p1"));
-				pieces.Add(new Pawn (1, 1, "p2"));
-				pieces.Add(new Pawn (1, 2, "p3"));
-				pieces.Add(new Pawn (1, 3, "p4"));
-				pieces.Add(new Pawn (1, 4, "p5"));
-				pieces.Add(new Pawn (1, 5, "p6"));
-				pieces.Add(new Pawn (1, 6, "p7"));
-				pieces.Add(new Pawn (1, 7, "p8"));
+				pieces.Add(new Pawn (1, 0, "Pawn", "p1"));
+				pieces.Add(new Pawn (1, 1, "Pawn", "p2"));
+				pieces.Add(new Pawn (1, 2, "Pawn", "p3"));
+				pieces.Add(new Pawn (1, 3, "Pawn", "p4"));
+				pieces.Add(new Pawn (1, 4, "Pawn", "p5"));
+				pieces.Add(new Pawn (1, 5, "Pawn", "p6"));
+				pieces.Add(new Pawn (1, 6, "Pawn", "p7"));
+				pieces.Add(new Pawn (1, 7, "Pawn", "p8"));
 				
-				pieces.Add(new Rook (0, 0, "r1"));
-				pieces.Add(new Knight (0, 1, "n1"));
-				pieces.Add(new Bishop (0, 2, "b1"));
-				pieces.Add(new Queen (0, 3, "q1"));
-				pieces.Add(new King (0, 4, "k1"));
-				pieces.Add(new Bishop (0, 5, "b2"));
-				pieces.Add(new Knight (0, 6, "n2"));
-				pieces.Add(new Rook (0, 7, "r2"));
+				pieces.Add(new Rook (0, 0, "Rook", "r1"));
+				pieces.Add(new Knight (0, 1, "Knight", "n1"));
+				pieces.Add(new Bishop (0, 2, "Bishop", "b1"));
+				pieces.Add(new Queen (0, 3, "Queen", "q1"));
+				pieces.Add(new King (0, 4, "King", "k1"));
+				pieces.Add(new Bishop (0, 5, "Bishop", "b2"));
+				pieces.Add(new Knight (0, 6, "Knight", "n2"));
+				pieces.Add(new Rook (0, 7, "Rook", "r2"));
 			}
 			_piecesList[player] = pieces;
 		}
@@ -128,22 +136,32 @@ public class GameRunner
    		return null; 
 	}
 	
-	public bool Move(string type, int rank, int files)
+	public Piece CheckPieceID(string pieceID)
 	{
-		bool occupied = IsOccupied(type, rank, files);
-		if(occupied)
+		foreach (var playerPieces in _piecesList.Values)
 		{
-			return false;
+			foreach (var piece in playerPieces)
+			{
+				if (piece.ID().Equals(pieceID))
+				{
+					return piece;
+				}
+			}
 		}
-		else
+		return null;
+	}
+	
+	public bool Move(string pieceID, int rank, int files)
+	{
+		bool occupied = IsOccupied(pieceID, rank, files);
+		if(!occupied)
 		{
 			foreach (var playerPieces in _piecesList.Values)	//ini cek di dalam list
 			{
 				// Piece piece = playerPieces.FirstOrDefault(pieceType => pieceType.Type() == type); //Kalo pake ini ngebug di black piece
 				foreach(var piece in playerPieces)
 				{
-					// Console.WriteLine(piece.Type());
-					if(piece.Type() == type)
+					if(piece.ID() == pieceID)
 					{
 						piece.SetRank(rank);
 						piece.SetFiles(files);
@@ -155,7 +173,7 @@ public class GameRunner
 		return false;
 	}
 	
-	public bool IsOccupied(string type, int rank, int files)
+	public bool IsOccupied(string pieceID, int rank, int files)
 	{
 		foreach (var playerPieces in _piecesList.Values)
 		{
@@ -164,13 +182,13 @@ public class GameRunner
 				if(piece.GetRank() == rank && piece.GetFiles() == files)
 				{
 					Console.WriteLine("Occupied");
-					if(piece.Type().Any(Char.IsUpper) && type.Any(Char.IsUpper))
+					if(piece.ID().Any(Char.IsUpper) && pieceID.Any(Char.IsUpper))
 					{
 						Console.WriteLine("Double Uppercase detected");
-						Console.WriteLine($"Occupied by: {piece.Type()}, not your enemy");
+						Console.WriteLine($"Occupied by: {piece.ID()}, not your enemy");
 						return true;
 					}
-					Console.WriteLine($"Piece occupied by: {piece.Type()}, but it's your enemy!");
+					Console.WriteLine($"Piece occupied by: {piece.ID()}, but it's your enemy!");
 					piece.ChangeStatus();
 					bool capturedStatus = CapturePiece(piece);
 					Console.WriteLine($"Piece captured status: {capturedStatus}");
@@ -190,12 +208,12 @@ public class GameRunner
 				bool status = pieceList.GetStatus();
 				if(status)
 				{
-					Console.WriteLine($"Piece to remove: {pieceList.Type()}");
-					if(pieceList.Type() == "K1")
+					Console.WriteLine($"Piece to remove: {pieceList.ID()}");
+					if(pieceList.ID() == "K1")
 					{
 						SetGameStatus(GameStatus.BLACK_WIN);
 					}
-					else if(pieceList.Type() == "k1")
+					else if(pieceList.ID() == "k1")
 					{
 						SetGameStatus(GameStatus.WHITE_WIN);
 					}
@@ -286,4 +304,5 @@ public class GameRunner
 		}
 		return null;
 	}
+	
 }

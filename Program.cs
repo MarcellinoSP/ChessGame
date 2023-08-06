@@ -13,15 +13,19 @@ class Program
 		PlayerList(chessGame);
 		PieceInitializing(chessGame);
 		
-		chessGame.Move("K1", 3, 7);
+		chessGame.Move("K1", 6, 4);
 		chessGame.Move("r1", 3, 4);
 		// chessGame.Move("q1", 5, 7);
 		DrawBoard(chessGame);
-
 		
+		GetAvailableMove(chessGame, "q1");
+		
+		//TRIAL KING CHECK STATUS
 		bool check = chessGame.KingCheckStatus();
 		Console.WriteLine($"King checked condition: {check}");
 
+		
+		//TRIAL SWITCHING PLAYER TURN
 		IPlayer player = chessGame.GetCurrentTurn();
 		Console.WriteLine(player.GetName());
 		chessGame.SwitchTurn();
@@ -30,8 +34,6 @@ class Program
 		chessGame.SwitchTurn();
 		IPlayer player2 = chessGame.GetCurrentTurn();
 		Console.WriteLine(player2.GetName());
-
-		ChessMove movement = new();
 		// Pawn pawn = new(1, 1, "P10");
 		// // movement.GetMoveSet(pawn);
 		// Position position = movement.GetMoveSet(pawn);
@@ -45,7 +47,6 @@ class Program
 		// GameStatus(chessGame);
 	}
 	//Drawing Board Method
-	
 	static void DrawBoard(GameRunner game)
 	{
 		bool setBoard = game.SetBoardBoundary(8);
@@ -58,7 +59,7 @@ class Program
 				Piece piece = game.CheckPiece(i, j);
 				if(piece != null)
 				{
-					Console.Write($"| {piece.Type()} ");
+					Console.Write($"| {piece.ID()} ");
 				}
 				else
 				{
@@ -157,5 +158,18 @@ class Program
 		// 	break;
 		// }
 		Console.WriteLine(status);
+	}
+
+	static void GetAvailableMove(GameRunner game, string pieceID)
+	{
+		Piece piece = game.CheckPieceID(pieceID);
+		Console.WriteLine(piece);
+		List<Position> pieceAvailableMove = game.GetPieceAvailableMove(piece);
+		
+		foreach(var position in pieceAvailableMove)
+		{
+			Console.WriteLine($"{position.GetRank()}, {position.GetFiles()}");
+			Console.WriteLine();
+		}
 	}
 }

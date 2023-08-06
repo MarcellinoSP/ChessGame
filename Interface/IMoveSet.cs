@@ -1,6 +1,6 @@
 namespace ChessGame;
 public interface IMoveSet
 {
-	Position PieceMove();
-	// List<Position> pieceMovement(Position currentPosition);
+	// Position pieceMove();
+	List<Position> movement (Piece piece);
 }
