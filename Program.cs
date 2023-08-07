@@ -11,8 +11,10 @@ class Program
 		PlayerList(chessGame);
 		PieceInitializing(chessGame);
 		// chessGame.IsOccupied(7,7);
-		// chessGame.CapturePiece("R2", 0, 7);
-		chessGame.Move("R2", 0, 7);
+		// chessGame.CapturePiece("r2", 0, 7);
+		
+		bool tryCheck = chessGame.Move("q1", 7, 0);
+		// chessGame.Move("R2", 0, 7);
 
 		DrawBoard(chessGame);
 		

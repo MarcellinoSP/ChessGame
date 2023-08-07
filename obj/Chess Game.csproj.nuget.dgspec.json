@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/workspaces/ChessGame/Chess Game.csproj": {}
+    "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {}
   },
   "projects": {
-    "/workspaces/ChessGame/Chess Game.csproj": {
+    "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspaces/ChessGame/Chess Game.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
         "projectName": "Chess Game",
-        "projectPath": "/workspaces/ChessGame/Chess Game.csproj",
-        "packagesPath": "/home/codespace/.nuget/packages/",
-        "outputPath": "/workspaces/ChessGame/obj/",
+        "projectPath": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/codespace/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/dotnet/7.0.305/sdk/7.0.305/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

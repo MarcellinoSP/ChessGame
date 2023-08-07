@@ -130,7 +130,7 @@ public class RookMoveSet : IMoveSet
 		}
 		
 		//Filter unnecessary position
-		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 8 || move.GetRank() > 8 || move.GetFiles() < 0);
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
 		return availablePosition;
 	}
 }
@@ -152,7 +152,7 @@ public class BishopMoveSet : IMoveSet		//DONE
 		}
 		
 		//Filter unnecessary position
-		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 8 || move.GetRank() > 8 || move.GetFiles() < 0);
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
 		return availablePosition;
 	}
 }
@@ -178,7 +178,7 @@ public class QueenMoveSet : IMoveSet		//DONE
 		}
 
 		//Filter unnecessary position
-		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 8 || move.GetRank() > 8 || move.GetFiles() < 0);
+		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
 		return availablePosition;
 	}
 }

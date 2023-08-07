@@ -25,6 +25,23 @@ public class GameRunner
 		return pieceMovement;
 	}
 	
+	public List <Position> GetPieceAvailableMove(string pieceID)
+	{
+		foreach (var playerPiece in _piecesList.Values)
+		{
+			foreach (var piece in playerPiece)
+			{
+				if(piece.ID() == pieceID)
+				{
+					IMoveSet moveSet = _chessMove.GetMoveSet(piece);
+					List <Position> pieceMovement = moveSet.movement(piece);
+					return pieceMovement;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public bool? AddPlayer(IPlayer player)
 	{
 		PlayerColor playerColor = new();
@@ -125,7 +142,6 @@ public class GameRunner
 		return true;
 	}
 	
-	
 	public Piece? CheckPiece(int rank, int files)
 	{
    		foreach (var playerPieces in _piecesList.Values)
@@ -155,36 +171,115 @@ public class GameRunner
 		}
 		return null;
 	}
-
+	
+	// public bool Move (string pieceID, int rank, int files)		//HARUSNYA BODY METHOD DIBAWAH GET PIECE POSITION NYA
+	// {
+	// 	List <Position> positionAvailable = GetPieceAvailableMove(pieceID);
+	// 	List <Position> filteredMove = new List <Position>();
+	// 	foreach (var pos in positionAvailable)
+	// 	{
+	// 		int checkRank = pos.GetRank();
+	// 		int checkFiles = pos.GetFiles();
+			
+	// 		bool blocked = IsOccupied(pieceID, checkRank, checkFiles);
+	// 		if (!blocked && IsPathClear(pieceID, checkRank, checkFiles, rank, files))
+	// 		{
+	// 			filteredMove.Add((new Position(checkRank, checkFiles)));
+	// 		}
+	// 	}
+	// 	foreach (var movePos in filteredMove)
+	// 	{
+	// 		Console.WriteLine($"{movePos.GetRank()}, {movePos.GetFiles()} \n");
+	// 	}
+	// 	return false;
+	// }
 	
 	public bool Move(string pieceID, int rank, int files)
 	{
-		// bool occupied = IsOccupied(pieceID, rank, files);
-		// if(!occupied)
-		// {
-			foreach (var playerPieces in _piecesList.Values)
+		Piece pieceToMove = CheckPiece(pieceID);
+		int pieceRank = pieceToMove.GetRank();
+		int pieceFiles = pieceToMove.GetFiles();
+		//Filter Movement Trial
+		List <Position> positionAvailable = GetPieceAvailableMove(pieceToMove);
+		List <Position> filteredMove = new List <Position>();
+		
+		foreach(var position in positionAvailable)
+		{
+			int checkRank = position.GetRank();
+			int checkFiles = position.GetFiles();
+			
+			bool blocked = IsOccupied(pieceID, checkRank, checkFiles);
+			if(!blocked)
 			{
-				foreach(var piece in playerPieces)
-				{
-					if(piece.ID() == pieceID)
-					{
-						List<Position> positionAvailable = GetPieceAvailableMove(piece);
-						foreach(var position in positionAvailable)
-						{
-							if(position.GetRank() == rank && position.GetFiles() == files)
-							{
-								piece.SetRank(rank);
-								piece.SetFiles(files);
-								return true;
-							}
-						}
-						return false;
-					}
-				}
+				filteredMove.Add(new Position(checkRank, checkFiles));
 			}
-		// }
-		return false;
+		}
+		
+		foreach(var pos in filteredMove)
+		{
+			Console.WriteLine($"{pos.GetRank()}, {pos.GetFiles()}");
+		}
+		
+		return true;
 	}
+	
+	private bool IsPathClear(string pieceID, int currentRank, int currentFile, int targetRank, int targetFile)
+	{
+		int rankDelta = targetRank - currentRank;
+		int fileDelta = targetFile - currentFile;
+
+		int rankIncrement = Math.Sign(rankDelta);
+		int fileIncrement = Math.Sign(fileDelta);
+		
+		int rank = currentRank + rankIncrement;
+		int file = currentFile + fileIncrement;
+
+		while (rank != targetRank || file != targetFile)
+		{
+			Console.WriteLine("while");
+			if (IsOccupied(pieceID, rank, file))
+			{
+				return false;
+			}
+			rank += rankIncrement;
+			file += fileIncrement;
+			if (rank == targetRank && file == targetFile)
+			{
+				break;
+			}
+		}
+		return true;
+	}
+
+	
+	// public bool Move(string pieceID, int rank, int files)
+	// {
+	// 	// bool occupied = IsOccupied(pieceID, rank, files);
+	// 	// if(!occupied)
+	// 	// {
+	// 		foreach (var playerPieces in _piecesList.Values)
+	// 		{
+	// 			foreach(var piece in playerPieces)
+	// 			{
+	// 				if(piece.ID() == pieceID)
+	// 				{
+	// 					List<Position> positionAvailable = GetPieceAvailableMove(piece);
+	// 					foreach(var position in positionAvailable)
+	// 					{
+	// 						if(position.GetRank() == rank && position.GetFiles() == files)
+	// 						{
+	// 							piece.SetRank(rank);
+	// 							piece.SetFiles(files);
+	// 							return true;
+	// 						}
+	// 					}
+	// 					return false;
+	// 				}
+	// 			}
+	// 		}
+	// 	// }
+	// 	return false;
+	// }
 	
 	public bool IsOccupied(string pieceID, int rank, int files)
 	{
@@ -194,17 +289,14 @@ public class GameRunner
 			{
 				if(piece.GetRank() == rank && piece.GetFiles() == files)
 				{
-					Console.WriteLine("Occupied");
-					if(piece.ID().Any(Char.IsUpper) && pieceID.Any(Char.IsUpper))
+					// Console.WriteLine("Occupied");
+					if(piece.ID().Any(Char.IsUpper) && pieceID.Any(Char.IsUpper) || piece.ID().Any(Char.IsLower) && pieceID.Any(Char.IsLower))
 					{
-						Console.WriteLine("Double Uppercase detected");
-						Console.WriteLine($"Occupied by: {piece.ID()}, not your enemy");
+						// Console.WriteLine("Double Uppercase detected");
+						// Console.WriteLine($"Occupied by: {piece.ID()}, not your enemy \n");
 						return true;
 					}
-					Console.WriteLine($"Piece occupied by: {piece.ID()}, but it's your enemy!");
-					// piece.ChangeStatus();
-					// bool capturedStatus = CapturePiece(piece);
-					// Console.WriteLine($"Piece captured status: {capturedStatus}");
+					// Console.WriteLine($"Piece occupied by: {piece.ID()}, but it's your enemy! \n");
 					return false;
 				}
 			}
@@ -237,18 +329,16 @@ public class GameRunner
 			{
 				foreach (var piece in playerPieces)
 				{
-					Console.WriteLine(piece.ID());
 					if(piece.GetRank() == rank && piece.GetFiles() == files)
 					{
-						if(piece.ID().Any(Char.IsUpper) && pieceID.Any(Char.IsUpper))
+						if(piece.ID().Any(Char.IsUpper) && pieceID.Any(Char.IsUpper) || piece.ID().Any(Char.IsLower) && pieceID.Any(Char.IsLower))
 						{
-						
+							
 						}
 						else
 						{
 							piece.ChangeStatus();
 							playerPieces.Remove(piece);
-							Console.WriteLine("Capture Success");
 							return true;
 						}
 					}
@@ -265,7 +355,6 @@ public class GameRunner
 		{
 			foreach(var pieceList in pieces)
 			{
-				
 				bool status = pieceList.GetStatus();
 				if(status)
 				{
