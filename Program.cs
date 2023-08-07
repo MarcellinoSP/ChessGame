@@ -10,14 +10,21 @@ class Program
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
 		PieceInitializing(chessGame);
+		DrawBoard(chessGame);
 		
-		// chessGame.Move("P5", 5, 4);
-		GetAvailableMove(chessGame, "r1");
-		// chessGame.Move("Q1", 5, 5);
-		// chessGame.Move("K1", 7, 3);
-		chessGame.Move("r1", 7, 0);
+		// GetAvailableMove(chessGame, "r1");
+		chessGame.Move("K1", 6, 4);
+		DrawBoard(chessGame);
+		chessGame.Move("Q1", 5, 5);
+		DrawBoard(chessGame);
+		chessGame.Move("P5", 5, 4);
 		chessGame.Move("q1", 3, 0);
-		// chessGame.Move("q1", 0, 0);
+		DrawBoard(chessGame);
+		chessGame.Move("Q1", 1, 5);
+		DrawBoard(chessGame);
+		chessGame.Move("Q1", 3, 7);
+		chessGame.Move("r2", 4, 7);
+		chessGame.Move("r2", 4, 4);
 		DrawBoard(chessGame);
 		
 		
@@ -45,7 +52,7 @@ class Program
 		// // CheckPiece(chessGame);
 		// DrawBoard(chessGame);				//New Bug = piece ngga ke capture //UPDATE: BUG FIXED
 		
-		// GameStatus(chessGame);
+		GameStatus(chessGame);
 	}
 	//Drawing Board Method
 	static void DrawBoard(GameRunner game)
@@ -78,7 +85,7 @@ class Program
 		IPlayer player1 = new HumanPlayer();
 		// Console.Write("Input player 1 name: ");
 		// string player1Name = Console.ReadLine();
-		string player1Name = "Alvaro";
+		string player1Name = "Aether";
 		
 		bool name1 = player1.SetName(player1Name);
 		bool uid1 = player1.SetUID(1);
@@ -88,7 +95,7 @@ class Program
 		IPlayer player2 = new HumanPlayer();
 		// Console.Write("Input player 2 name: ");
 		// string player2Name = Console.ReadLine();
-		string player2Name = "Altair";
+		string player2Name = "Lumine";
 		
 		bool name2 = player2.SetName(player2Name);
 		bool uid2 =player2.SetUID(2);
@@ -124,7 +131,7 @@ class Program
 			{
 				foreach(Piece piece in playerPiece)
 				{
-					Console.WriteLine($"{playerName.GetName()}, {piece.Type()}");
+					Console.WriteLine($"{playerName.GetName()}, {piece.ID()}");
 				}
 			}
 			Console.WriteLine();

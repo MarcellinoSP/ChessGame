@@ -121,6 +121,18 @@ public class GameRunner
 		return true;
 	}
 	
+	public Piece FindPiece(int rank, int files, string pieceID)
+	{
+		foreach (var playerPieces in _piecesList.Values)
+   		{
+	  		foreach (var piece in playerPieces)
+	  		{
+		 		
+	  		}
+   		}
+		return null;
+	}
+	
 	public Piece? CheckPiece(int rank, int files)
 	{
    		foreach (var playerPieces in _piecesList.Values)
@@ -161,18 +173,19 @@ public class GameRunner
 				foreach(var piece in playerPieces)
 				{
 					if(piece.ID() == pieceID)
-					{											
-						//MUNGKIN TAMBAH CHECK AVAILABLE MOVE DISINI
+					{	
+						//CHECK BLOCKED PATH BY FRIENDS?
 						List<Position> positionAvailable = GetPieceAvailableMove(piece);
 						foreach(var position in positionAvailable)
 						{
-							Console.WriteLine(piece.ID());
+							Console.WriteLine($"{position.GetRank()}, {position.GetFiles()}");
 							if(position.GetRank() == rank && position.GetFiles() == files)
 							{
 								piece.SetRank(rank);
 								piece.SetFiles(files);
 								return true;
 							}
+							// Console.WriteLine(piece.ID());
 						}
 						return false;
 					}
@@ -234,10 +247,11 @@ public class GameRunner
 		{
 			foreach(var piece in pieceList)
 			{
-				if(piece.Type() == "K1")
+				if(piece.ID() == "K1")
 				{
 					kingRank = piece.GetRank();
 					kingFiles = piece.GetFiles();
+					Console.WriteLine($"{kingRank}, {kingFiles}");
 				}
 			}
 		}
@@ -245,20 +259,20 @@ public class GameRunner
 		{
 			foreach(var piece in pieceList)
 			{
-				if(piece.GetFiles() == kingFiles)
+				if(piece.GetFiles() == kingFiles || piece.GetRank() == kingRank)
 				{
-					switch(piece.Type())
+					switch(piece.ID())
 					{
 						case "r1":
-							Console.WriteLine($"Checked by {piece.Type()}!");
+							Console.WriteLine($"Checked by {piece.ID()}!");
 							return true;
 							break;
 						case "r2":
-							Console.WriteLine($"Checked by {piece.Type()}!");
+							Console.WriteLine($"Checked by {piece.ID()}!");
 							return true;
 							break;
 						case "q1":
-							Console.WriteLine($"Checked by {piece.Type()}!");
+							Console.WriteLine($"Checked by {piece.ID()}!");
 							return true;
 							break;
 					}
