@@ -8,19 +8,19 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Batch 3\\.nuget\\packages\\": {}
+    "/home/codespace/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Batch 3\\Documents\\Bootcamp New\\Game Project\\ChessGame\\Chess Game.csproj",
+      "projectUniqueName": "/workspaces/ChessGame/Chess Game.csproj",
       "projectName": "Chess Game",
-      "projectPath": "C:\\Users\\Batch 3\\Documents\\Bootcamp New\\Game Project\\ChessGame\\Chess Game.csproj",
-      "packagesPath": "C:\\Users\\Batch 3\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Batch 3\\Documents\\Bootcamp New\\Game Project\\ChessGame\\obj\\",
+      "projectPath": "/workspaces/ChessGame/Chess Game.csproj",
+      "packagesPath": "/home/codespace/.nuget/packages/",
+      "outputPath": "/workspaces/ChessGame/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Batch 3\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/codespace/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -59,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/dotnet/7.0.305/sdk/7.0.305/RuntimeIdentifierGraph.json"
       }
     }
   }

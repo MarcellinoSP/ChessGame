@@ -55,6 +55,10 @@ public class GameRunner
 	public bool SetBoardBoundary(int size)
 	{
 		bool condition = _chessBoard.SetBoardSize(size);
+		if(size  <= 0)
+		{
+			return false;
+		}
 		return condition;
 	}
 	
@@ -121,17 +125,6 @@ public class GameRunner
 		return true;
 	}
 	
-	public Piece FindPiece(int rank, int files, string pieceID)
-	{
-		foreach (var playerPieces in _piecesList.Values)
-   		{
-	  		foreach (var piece in playerPieces)
-	  		{
-		 		
-	  		}
-   		}
-		return null;
-	}
 	
 	public Piece? CheckPiece(int rank, int files)
 	{
@@ -148,7 +141,7 @@ public class GameRunner
    		return null; 
 	}
 	
-	public Piece CheckPieceID(string pieceID)
+	public Piece? CheckPiece(string pieceID)
 	{
 		foreach (var playerPieces in _piecesList.Values)
 		{
@@ -162,36 +155,34 @@ public class GameRunner
 		}
 		return null;
 	}
+
 	
 	public bool Move(string pieceID, int rank, int files)
 	{
-		bool occupied = IsOccupied(pieceID, rank, files);
-		if(!occupied)
-		{
+		// bool occupied = IsOccupied(pieceID, rank, files);
+		// if(!occupied)
+		// {
 			foreach (var playerPieces in _piecesList.Values)
 			{
 				foreach(var piece in playerPieces)
 				{
 					if(piece.ID() == pieceID)
-					{	
-						//CHECK BLOCKED PATH BY FRIENDS?
+					{
 						List<Position> positionAvailable = GetPieceAvailableMove(piece);
 						foreach(var position in positionAvailable)
 						{
-							Console.WriteLine($"{position.GetRank()}, {position.GetFiles()}");
 							if(position.GetRank() == rank && position.GetFiles() == files)
 							{
 								piece.SetRank(rank);
 								piece.SetFiles(files);
 								return true;
 							}
-							// Console.WriteLine(piece.ID());
 						}
 						return false;
 					}
 				}
 			}
-		}
+		// }
 		return false;
 	}
 	
@@ -211,22 +202,70 @@ public class GameRunner
 						return true;
 					}
 					Console.WriteLine($"Piece occupied by: {piece.ID()}, but it's your enemy!");
-					piece.ChangeStatus();
-					bool capturedStatus = CapturePiece(piece);
-					Console.WriteLine($"Piece captured status: {capturedStatus}");
+					// piece.ChangeStatus();
+					// bool capturedStatus = CapturePiece(piece);
+					// Console.WriteLine($"Piece captured status: {capturedStatus}");
 					return false;
 				}
 			}
 		}
 		return false;
 	}
+
+	public bool IsOccupied(int rank, int files)
+	{
+		foreach (var playerPieces in _piecesList.Values)
+		{
+			foreach(var piece in playerPieces)
+			{
+				if(piece.GetRank() == rank && piece.GetFiles() == files)
+				{
+					Console.WriteLine($"Occupied by {piece.ID()}");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
+	public bool CapturePiece(string pieceID, int rank, int files)
+	{
+		bool occupied = IsOccupied(rank, files);
+		if (occupied)
+		{
+			foreach (var playerPieces in _piecesList.Values)
+			{
+				foreach (var piece in playerPieces)
+				{
+					Console.WriteLine(piece.ID());
+					if(piece.GetRank() == rank && piece.GetFiles() == files)
+					{
+						if(piece.ID().Any(Char.IsUpper) && pieceID.Any(Char.IsUpper))
+						{
+						
+						}
+						else
+						{
+							piece.ChangeStatus();
+							playerPieces.Remove(piece);
+							Console.WriteLine("Capture Success");
+							return true;
+						}
+					}
+					
+				}
+			}
+		}
+		return false;
+	}
+
 	public bool CapturePiece(Piece piece)
 	{
 		foreach(var pieces in _piecesList.Values)
 		{
 			foreach(var pieceList in pieces)
 			{
+				
 				bool status = pieceList.GetStatus();
 				if(status)
 				{

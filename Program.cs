@@ -10,38 +10,44 @@ class Program
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
 		PieceInitializing(chessGame);
+		// chessGame.IsOccupied(7,7);
+		// chessGame.CapturePiece("R2", 0, 7);
+		chessGame.Move("R2", 0, 7);
+
 		DrawBoard(chessGame);
 		
 		// GetAvailableMove(chessGame, "r1");
-		chessGame.Move("K1", 6, 4);
-		DrawBoard(chessGame);
-		chessGame.Move("Q1", 5, 5);
-		DrawBoard(chessGame);
-		chessGame.Move("P5", 5, 4);
-		chessGame.Move("q1", 3, 0);
-		DrawBoard(chessGame);
-		chessGame.Move("Q1", 1, 5);
-		DrawBoard(chessGame);
-		chessGame.Move("Q1", 3, 7);
-		chessGame.Move("r2", 4, 7);
-		chessGame.Move("r2", 4, 4);
-		DrawBoard(chessGame);
+		// // chessGame.Move("Q1", 6, 4);
+		// // DrawBoard(chessGame);
+		// chessGame.Move("Q1", 5, 5);
+		// DrawBoard(chessGame);
+		// chessGame.Move("P5", 5, 4);
+		// chessGame.Move("q1", 3, 0);
+		// DrawBoard(chessGame);
+		// chessGame.Move("Q1", 1, 5);
+		// DrawBoard(chessGame);
+		// chessGame.Move("Q1", 3, 7);
+		// chessGame.Move("r2", 4, 7);
+		// chessGame.Move("r2", 4, 4);
+		// DrawBoard(chessGame);
 		
 		
-		//TRIAL KING CHECK STATUS
-		bool check = chessGame.KingCheckStatus();
-		Console.WriteLine($"King checked condition: {check}");
+		// //TRIAL KING CHECK STATUS
+		// bool check = chessGame.KingCheckStatus();
+		// Console.WriteLine($"King checked condition: {check}");
 
 		
-		//TRIAL SWITCHING PLAYER TURN
-		IPlayer player = chessGame.GetCurrentTurn();
-		Console.WriteLine(player.GetName());
-		chessGame.SwitchTurn();
-		IPlayer player1 = chessGame.GetCurrentTurn();
-		Console.WriteLine(player1.GetName());
-		chessGame.SwitchTurn();
-		IPlayer player2 = chessGame.GetCurrentTurn();
-		Console.WriteLine(player2.GetName());
+		// //TRIAL SWITCHING PLAYER TURN
+		// IPlayer player = chessGame.GetCurrentTurn();
+		// Console.WriteLine(player.GetName());
+		// chessGame.SwitchTurn();
+		// IPlayer player1 = chessGame.GetCurrentTurn();
+		// Console.WriteLine(player1.GetName());
+		// chessGame.SwitchTurn();
+		// IPlayer player2 = chessGame.GetCurrentTurn();
+		// Console.WriteLine(player2.GetName());
+
+
 		// Pawn pawn = new(1, 1, "P10");
 		// // movement.GetMoveSet(pawn);
 		// Position position = movement.GetMoveSet(pawn);
@@ -58,6 +64,7 @@ class Program
 	static void DrawBoard(GameRunner game)
 	{
 		bool setBoard = game.SetBoardBoundary(8);
+		Console.WriteLine($"Setting board boundary condition: {setBoard}");
 		int boardSize = game.GetBoardBoundary();
 		Console.WriteLine("+----+----+----+----+----+----+----+----+");
 		for(int i = 0; i < boardSize; i++)
@@ -170,7 +177,7 @@ class Program
 
 	static void GetAvailableMove(GameRunner game, string pieceID)
 	{
-		Piece piece = game.CheckPieceID(pieceID);
+		Piece piece = game.CheckPiece(pieceID);
 		Console.WriteLine(piece);
 		List<Position> pieceAvailableMove = game.GetPieceAvailableMove(piece);
 		

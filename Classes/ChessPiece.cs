@@ -43,6 +43,7 @@ public abstract class Piece
 public class King : Piece			//DONE
 {
 	private bool _castlingDone;
+	private bool _isMoved = false;
 	
 	public King()
 	{
@@ -131,9 +132,9 @@ public class King : Piece			//DONE
 	{
 		if(position.GetRank() != 5 || position.GetFiles() != 1)
 		{
-			return true;
+			_isMoved = true;
 		}
-		return false;
+		return _isMoved;
 	}
 }
 
@@ -141,6 +142,7 @@ public class Pawn : Piece			//DONE
 {
 	private bool _promotionStatus;
 	private bool _enPassantStatus;
+	private bool _isMoved = false;
 	
 	public Pawn()
 	{
@@ -235,7 +237,7 @@ public class Pawn : Piece			//DONE
 	
 	public bool IsMoved()
 	{
-		return true;
+		return _isMoved;
 	}
 }
 
