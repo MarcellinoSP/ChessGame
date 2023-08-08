@@ -13,10 +13,11 @@ class Program
 		// chessGame.IsOccupied(7,7);
 		// chessGame.CapturePiece("r2", 0, 7);
 		
-		chessGame.Move("p1", 3, 0);
-		chessGame.Move("p1", 5, 0);
-		// chessGame.Move("P1", 2, 0);
-		// // chessGame.Move("N2", 5, 5);
+		chessGame.Move("P2", 4, 1);
+		chessGame.Move("P2", 3, 1);
+		chessGame.Move("P2", 2, 1);
+		chessGame.Move("P2", 2, 1);
+		// chessGame.Move("N2", 5, 5);
 		// chessGame.Move("P1", 4, 0);
 		// chessGame.Move("R1", 5, 0);
 		// chessGame.Move("R1", 5, 7);

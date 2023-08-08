@@ -181,7 +181,6 @@ public class GameRunner
 		Piece pieceToMove = CheckPiece(pieceID);
 		int pieceRank = pieceToMove.GetRank();
 		int pieceFiles = pieceToMove.GetFiles();
-		int index = 1;
 		
 		//Filter Movement Trial
 		List <Position> positionAvailable = GetPieceAvailableMove(pieceToMove);
@@ -193,23 +192,6 @@ public class GameRunner
 			int checkFiles = position.GetFiles();
 			bool blocked = IsOccupied(pieceID, checkRank, checkFiles);
 			
-			//BETTER DELETE LANGSUNG KE DICTIONARY NYA
-			if(pieceID.Contains('P') && pieceToMove is Pawn pawnWhite)
-			{
-				if(pawnWhite.IsMoved() == true && index == 2)
-				{
-					blocked = true;
-				}
-			}
-			else if (pieceID.Contains('p') && pieceToMove is Pawn pawnBlack)
-			{
-				if(pawnBlack.IsMoved() == true && index == 2)
-				{
-					blocked = true;
-				}
-			}
-			//BETTER DELETE LANGSUNG KE DICTIONARY NYA
-			
 			if(pieceID.Contains('N') || pieceID.Contains('n'))
 			{
 				if(!blocked)
@@ -218,16 +200,23 @@ public class GameRunner
 				}
 			}
 			
+			if(pieceID.Contains('P'))
+			{
+				Console.WriteLine($"{pieceRank}, {pieceFiles}");
+				bool occupiedLeft = IsOccupied(pieceID, pieceRank - 1, pieceFiles + 1);
+				Console.WriteLine($"{pieceRank - 1}, {pieceFiles + 1}");
+				Console.WriteLine(occupiedLeft);
+			}
+			Console.WriteLine();
+			
 			if(!blocked && IsPathClear(pieceID, checkRank, checkFiles, pieceRank, pieceFiles))
 			{
 				filteredMove.Add(new Position(checkRank, checkFiles));
-				index++;
 			}
 		}
 		
 		foreach(var pos in filteredMove)
 		{
-			Console.WriteLine($"{pos.GetRank()}, {pos.GetFiles()}");
 			if(pos.GetRank() == rank && pos.GetFiles() == files)
 			{
 				bool capture = CapturePiece(pieceID, rank, files);
@@ -236,7 +225,6 @@ public class GameRunner
 				if(pieceToMove is Pawn pawn)
 				{
 					pawn.SetIsMoved(true);
-					Console.WriteLine(pawn.IsMoved());
 				}
 				return true;
 			}
@@ -286,7 +274,6 @@ public class GameRunner
 						// Console.WriteLine($"Occupied by: {piece.ID()}, not your enemy \n");
 						return true;
 					}
-					// Console.WriteLine($"Piece occupied by: {piece.ID()}, but it's your enemy! \n");
 					return false;
 				}
 			}
@@ -302,7 +289,6 @@ public class GameRunner
 			{
 				if(piece.GetRank() == rank && piece.GetFiles() == files)
 				{
-					// Console.WriteLine($"Occupied by {piece.ID()}");
 					return true;
 				}
 			}
@@ -339,6 +325,11 @@ public class GameRunner
 		return false;
 	}
 
+	private bool PawnCapture(string pieceID, int rank, int files)
+	{
+		return true;
+	}
+	
 	public bool CapturePiece(Piece piece)
 	{
 		foreach(var pieces in _piecesList.Values)

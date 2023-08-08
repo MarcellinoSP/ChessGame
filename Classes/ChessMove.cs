@@ -39,24 +39,43 @@ public class ChessMove
 	}
 }
 
-public class PawnMoveSingle : IMoveSet		//DONE, BUT NOT YET TESTED
+public class PawnMoveSingle : IMoveSet		//DONE
 {
 	public List<Position> movement(Piece piece)
 	{
 		List<Position> availablePosition = new List<Position>();
 		int rank = piece.GetRank();
 		int files = piece.GetFiles();
-		Console.WriteLine("Pass This Line Pawn Move Single");
 		
 		if(piece.ID().Any(Char.IsUpper))
 		{
-			availablePosition.Add(new Position(rank - 1, files));
-			availablePosition.Add(new Position(rank - 2, files));
+			if(piece is Pawn pawn)
+			{
+				if(pawn.IsMoved() == false)
+				{
+					availablePosition.Add(new Position(rank - 1, files));
+					availablePosition.Add(new Position(rank - 2, files));
+				}
+				else
+				{
+					availablePosition.Add(new Position(rank - 1, files));
+				}
+			}
 		}
 		else
 		{
-			availablePosition.Add(new Position(rank + 1, files));
-			availablePosition.Add(new Position(rank + 2, files));
+			if(piece is Pawn pawn)
+			{
+				if(pawn.IsMoved() == false)
+				{
+					availablePosition.Add(new Position(rank + 1, files));
+					availablePosition.Add(new Position(rank + 2, files));
+				}
+				else
+				{
+					availablePosition.Add(new Position(rank + 1, files));
+				}
+			}
 		}
 
 		//Filter unnecessary position
@@ -173,7 +192,7 @@ public class QueenMoveSet : IMoveSet		//DONE
 	}
 }
 
-public class KingMoveSet : IMoveSet			//DONE, BUT NOT YET TESTED
+public class KingMoveSet : IMoveSet			//DONE
 {
 	public List<Position> movement(Piece piece)
 	{
