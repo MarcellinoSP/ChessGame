@@ -1,5 +1,7 @@
 namespace ChessGame;
 
+public delegate void SwitchPlayer();
+
 public class GameRunner
 {
 	private IBoard _chessBoard;
@@ -8,8 +10,7 @@ public class GameRunner
 	private Dictionary<IPlayer, PlayerColor> _playerList;
 	private Dictionary<IPlayer, List<Piece>> _piecesList;
 	private GameStatus _gameStatus;
-	private bool _blackPawnMoved;
-	private bool _whitePawnMoved;
+	private SwitchPlayer _switchPlayer;
 	
 	public GameRunner()
 	{
@@ -18,8 +19,7 @@ public class GameRunner
 		_piecesList = new Dictionary<IPlayer, List<Piece>>();
 		_chessMove = new ChessMove();
 		_currentTurn = PlayerColor.WHITE;
-		_blackPawnMoved = false;
-		_whitePawnMoved = false;
+		_switchPlayer += SwitchTurn;
 	}
 	
 	public List<Position> GetPieceAvailableMove(Piece piece)
@@ -176,44 +176,46 @@ public class GameRunner
 		return null;
 	}
 	
-	public bool Move(string pieceID, int rank, int files)
+	public List <Position> FilterMove(Piece piece)
 	{
-		Piece pieceToMove = CheckPiece(pieceID);
-		int pieceRank = pieceToMove.GetRank();
-		int pieceFiles = pieceToMove.GetFiles();
+		int pieceRank = piece.GetRank();
+		int pieceFiles = piece.GetFiles();
+		string pieceID = piece.ID();
 		
-		//Filter Movement Trial
-		List <Position> positionAvailable = GetPieceAvailableMove(pieceToMove);
+		List <Position> availableMove = GetPieceAvailableMove(piece);
 		List <Position> filteredMove = new List <Position>();
 		
-		foreach(var position in positionAvailable)
+		foreach(var position in availableMove)
 		{
 			int checkRank = position.GetRank();
 			int checkFiles = position.GetFiles();
 			bool blocked = IsOccupied(pieceID, checkRank, checkFiles);
-			
-			if(pieceID.Contains('N') || pieceID.Contains('n'))
+
+			if (pieceID.Contains('P'))
 			{
-				if(!blocked)
-				{
-					filteredMove.Add(new Position(checkRank, checkFiles));
-				}
-			}
-			
-			if(pieceID.Contains('P'))
-			{
-				Console.WriteLine($"{pieceRank}, {pieceFiles}");
+				// Console.WriteLine($"{pieceRank}, {pieceFiles}");
 				bool occupiedLeft = IsOccupied(pieceID, pieceRank - 1, pieceFiles + 1);
-				Console.WriteLine($"{pieceRank - 1}, {pieceFiles + 1}");
-				Console.WriteLine(occupiedLeft);
+				// Console.WriteLine($"{pieceRank - 1}, {pieceFiles + 1}");
+				// Console.WriteLine(occupiedLeft);
 			}
-			Console.WriteLine();
 			
-			if(!blocked && IsPathClear(pieceID, checkRank, checkFiles, pieceRank, pieceFiles))
+			if ((pieceID.Contains('N') || pieceID.Contains('n')) && !blocked)
+			{
+				filteredMove.Add(new Position(checkRank, checkFiles));
+			}
+			else if(!blocked && IsPathClear(pieceID, checkRank, checkFiles, pieceRank, pieceFiles))
 			{
 				filteredMove.Add(new Position(checkRank, checkFiles));
 			}
 		}
+		return filteredMove;
+	}
+	
+	public bool Move(string pieceID, int rank, int files)
+	{
+		Piece pieceToMove = CheckPiece(pieceID);
+		
+		List <Position> filteredMove = FilterMove(pieceToMove);
 		
 		foreach(var pos in filteredMove)
 		{
@@ -226,6 +228,7 @@ public class GameRunner
 				{
 					pawn.SetIsMoved(true);
 				}
+				_switchPlayer?.Invoke();
 				return true;
 			}
 		}
@@ -267,11 +270,8 @@ public class GameRunner
 			{
 				if(piece.GetRank() == rank && piece.GetFiles() == files)
 				{
-					// Console.WriteLine("Occupied");
 					if(piece.ID().Any(Char.IsUpper) && pieceID.Any(Char.IsUpper) || piece.ID().Any(Char.IsLower) && pieceID.Any(Char.IsLower))
 					{
-						// Console.WriteLine("Double Uppercase detected");
-						// Console.WriteLine($"Occupied by: {piece.ID()}, not your enemy \n");
 						return true;
 					}
 					return false;
@@ -327,6 +327,8 @@ public class GameRunner
 
 	private bool PawnCapture(string pieceID, int rank, int files)
 	{
+		Piece piece = CheckPiece(pieceID);
+		
 		return true;
 	}
 	
@@ -347,23 +349,11 @@ public class GameRunner
 		return false;
 	}
 	
-	// public bool KingCheckStatus() //LOGIC DIBAWAH MASIH JELEK, BETTER DI ASOSIASI DENGAN MOVEMENT
+	// public bool KingCheckStatus()
 	// {
 	// 	int kingRank = 0;
 	// 	int kingFiles = 0;
 	// 	int boardSize = GetBoardBoundary();
-	// 	foreach(var pieceList in _piecesList.Values)
-	// 	{
-	// 		foreach(var piece in pieceList)
-	// 		{
-	// 			if(piece.ID() == "K1")
-	// 			{
-	// 				kingRank = piece.GetRank();
-	// 				kingFiles = piece.GetFiles();
-	// 				Console.WriteLine($"{kingRank}, {kingFiles}");
-	// 			}
-	// 		}
-	// 	}
 	// 	foreach(var pieceList in _piecesList.Values)
 	// 	{
 	// 		foreach(var piece in pieceList)
@@ -393,7 +383,88 @@ public class GameRunner
 	
 	public bool KingCheckStatus()
 	{
-		Piece piece = CheckPiece("K1");
+		if(_currentTurn == PlayerColor.WHITE)
+		{
+			Piece king = CheckPiece("K1");
+			int kingRank = king.GetRank();
+			int kingFiles = king.GetFiles();
+			int boardSize = GetBoardBoundary();
+			foreach(var pieceList in _piecesList.Values)
+			{
+				foreach(var piece in pieceList)
+				{
+					if(piece is Rook && piece.ID().Contains('r'))
+					{
+						for(int i = 1; i < boardSize; i++)
+						{
+							bool threat1 = IsOccupied("K1", kingRank - i, kingFiles);
+							bool threat2 = IsOccupied("K1", kingRank, kingFiles - i);
+							bool threat3 = IsOccupied("K1", kingRank + i, kingFiles);
+							bool threat4 = IsOccupied("K1", kingRank, kingFiles + i);
+							if(threat1 || threat2 || threat3 || threat4)
+							{
+								return false;
+							}
+						}
+					}
+					if(piece is Bishop && piece.ID().Contains('b'))
+					{
+						for(int i = 1; i < boardSize; i++)
+						{
+							bool threat1 = IsOccupied("K1", kingRank + i, kingFiles + i);
+							bool threat2 = IsOccupied("K1", kingRank + i, kingFiles - i);
+							bool threat3 = IsOccupied("K1", kingRank - i, kingFiles + i);
+							bool threat4 = IsOccupied("K1", kingRank - i, kingFiles - i);
+							if(threat1 || threat2 || threat3 || threat4)
+							{
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+		else if(_currentTurn == PlayerColor.BLACK)
+		{
+			Piece king = CheckPiece("k1");
+			int kingRank = king.GetRank();
+			int kingFiles = king.GetFiles();
+			int boardSize = GetBoardBoundary();
+			foreach(var pieceList in _piecesList.Values)
+			{
+				foreach(var piece in pieceList)
+				{
+					if(piece is Rook && piece.ID().Contains('R'))
+					{
+						for(int i = 1; i < boardSize; i++)
+						{
+							bool threat1 = IsOccupied("k1", kingRank - i, kingFiles);
+							bool threat2 = IsOccupied("k1", kingRank, kingFiles - i);
+							bool threat3 = IsOccupied("k1", kingRank + i, kingFiles);
+							bool threat4 = IsOccupied("k1", kingRank, kingFiles + i);
+							if(threat1 || threat2 || threat3 || threat4)
+							{
+								return false;
+							}
+						}
+					}
+					if(piece is Bishop && piece.ID().Contains('B'))
+					{
+						for(int i = 1; i < boardSize; i++)
+						{
+							bool threat1 = IsOccupied("k1", kingRank + i, kingFiles + i);
+							bool threat2 = IsOccupied("k1", kingRank + i, kingFiles - i);
+							bool threat3 = IsOccupied("k1", kingRank - i, kingFiles + i);
+							bool threat4 = IsOccupied("k1", kingRank - i, kingFiles - i);
+							if(threat1 || threat2 || threat3 || threat4)
+							{
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
 		return true;
 	}
 	
@@ -418,7 +489,7 @@ public class GameRunner
 		_currentTurn = (_currentTurn == PlayerColor.WHITE) ? PlayerColor.BLACK : PlayerColor.WHITE;
 	}
 
-	public IPlayer GetCurrentTurn()
+	public IPlayer? GetCurrentTurn()
 	{
 		foreach(KeyValuePair<IPlayer, PlayerColor> playerTurn in _playerList)
 		{

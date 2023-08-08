@@ -9,77 +9,48 @@ class Program
 		GameRunner chessGame = new GameRunner();
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
+		InitializeBoard(chessGame);
 		PieceInitializing(chessGame);
-		// chessGame.IsOccupied(7,7);
-		// chessGame.CapturePiece("r2", 0, 7);
+		Console.WriteLine("Press any key to start the game");
+		Console.ReadKey();
+		Console.Clear();
 		
-		chessGame.Move("P2", 4, 1);
-		chessGame.Move("P2", 3, 1);
-		chessGame.Move("P2", 2, 1);
-		chessGame.Move("P2", 2, 1);
-		// chessGame.Move("N2", 5, 5);
-		// chessGame.Move("P1", 4, 0);
-		// chessGame.Move("R1", 5, 0);
-		// chessGame.Move("R1", 5, 7);
-		// chessGame.Move("R1", 1, 7);
-		// chessGame.Move("R1", 3, 7);
-		// chessGame.Move("p7", 2, 6);
-		
-		// chessGame.Move("Q1", 5, 5);
-		// Console.WriteLine(tryCheck);
-		// chessGame.Move("R2", 0, 7);
-
-		DrawBoard(chessGame);
-		
-		// GetAvailableMove(chessGame, "r1");
-		// // chessGame.Move("Q1", 6, 4);
-		// // DrawBoard(chessGame);
-		// chessGame.Move("Q1", 5, 5);
-		// DrawBoard(chessGame);
-		// chessGame.Move("P5", 5, 4);
-		// chessGame.Move("q1", 3, 0);
-		// DrawBoard(chessGame);
-		// chessGame.Move("Q1", 1, 5);
-		// DrawBoard(chessGame);
-		// chessGame.Move("Q1", 3, 7);
-		// chessGame.Move("r2", 4, 7);
-		// chessGame.Move("r2", 4, 4);
-		// DrawBoard(chessGame);
-		
-		
-		// //TRIAL KING CHECK STATUS
-		// bool check = chessGame.KingCheckStatus();
-		// Console.WriteLine($"King checked condition: {check}");
-
-		
-		// //TRIAL SWITCHING PLAYER TURN
-		// IPlayer player = chessGame.GetCurrentTurn();
-		// Console.WriteLine(player.GetName());
-		// chessGame.SwitchTurn();
-		// IPlayer player1 = chessGame.GetCurrentTurn();
-		// Console.WriteLine(player1.GetName());
-		// chessGame.SwitchTurn();
-		// IPlayer player2 = chessGame.GetCurrentTurn();
-		// Console.WriteLine(player2.GetName());
-
-
-		// Pawn pawn = new(1, 1, "P10");
-		// // movement.GetMoveSet(pawn);
-		// Position position = movement.GetMoveSet(pawn);
-		
-		// chessGame.Move("p1", 7, 4); 		//2/8/2023 - UDAH GA NGEBUG COYY //FIX BUG //Sekarang bug di black piece //BUG FIXED
-		// DrawBoard(chessGame);
-		// chessGame.Move("p1", 4, 3);
-		// // CheckPiece(chessGame);
-		// DrawBoard(chessGame);				//New Bug = piece ngga ke capture //UPDATE: BUG FIXED
-		
-		GameStatus(chessGame);
+		while(true)
+		{
+			GameStatus(chessGame);
+			DrawBoard(chessGame);
+			bool check = chessGame.KingCheckStatus();
+			Console.WriteLine($"King is in threat: {check}");
+			IPlayer player = chessGame.GetCurrentTurn();
+			Console.WriteLine($"Current turn: {player.GetName()}");
+			int playerID = player.GetUID();
+			PlacePiece(chessGame, playerID);
+			Console.ReadKey();
+			Console.Clear();
+		}
 	}
-	//Drawing Board Method
+
+	static void InitializeBoard(GameRunner game)
+	{
+		bool board;
+		bool setBoard;
+		int boundary;
+		do
+		{
+			do
+			{
+				Console.WriteLine("Input board size: ");
+				string boundaryInput = Console.ReadLine();
+				board = int.TryParse(boundaryInput, out boundary);
+			}while(!board);
+		setBoard = game.SetBoardBoundary(boundary);
+		}while(!setBoard);
+		
+		Console.WriteLine($"Setting boundary for board: {setBoard} \n");
+	}
+
 	static void DrawBoard(GameRunner game)
 	{
-		bool setBoard = game.SetBoardBoundary(8);
-		Console.WriteLine($"Setting board boundary condition: {setBoard}");
 		int boardSize = game.GetBoardBoundary();
 		Console.WriteLine("+----+----+----+----+----+----+----+----+");
 		for(int i = 0; i < boardSize; i++)
@@ -105,24 +76,22 @@ class Program
 	static void AddPlayer(GameRunner game)
 	{
 		IPlayer player1 = new HumanPlayer();
-		// Console.Write("Input player 1 name: ");
-		// string player1Name = Console.ReadLine();
-		string player1Name = "Aether";
+		Console.Write("Input player 1 name: ");
+		string player1Name = Console.ReadLine();
 		
 		bool name1 = player1.SetName(player1Name);
 		bool uid1 = player1.SetUID(1);
 		bool? addPlayer1 = game.AddPlayer(player1);
-		Console.WriteLine($"Add player status: {addPlayer1}");
+		Console.WriteLine($"Add player 1 status: {addPlayer1} \n");
 		
 		IPlayer player2 = new HumanPlayer();
-		// Console.Write("Input player 2 name: ");
-		// string player2Name = Console.ReadLine();
-		string player2Name = "Lumine";
+		Console.Write("Input player 2 name: ");
+		string player2Name = Console.ReadLine();
 		
 		bool name2 = player2.SetName(player2Name);
-		bool uid2 =player2.SetUID(2);
+		bool uid2 = player2.SetUID(2);
 		bool? addPlayer2 = game.AddPlayer(player2);
-		Console.WriteLine($"Add player status: {addPlayer2}");
+		Console.WriteLine($"Add player 2 status: {addPlayer2} \n");
 	}
 	
 	static void PlayerList(GameRunner game)
@@ -135,11 +104,7 @@ class Program
 			
 			Console.WriteLine($"Currently playing: {playerName.GetName()} as {color}");
 		}
-	}
-
-	static void PlayerTurn(GameRunner game)
-	{
-		Dictionary<IPlayer, PlayerColor> playerList = game.GetPlayerList(); 
+		Console.WriteLine();
 	}
 	
 	static void PieceInitializing(GameRunner game)
@@ -151,16 +116,18 @@ class Program
 			IPlayer playerName = pieces.Key;
 			if(piecesList.TryGetValue(playerName, out List<Piece> playerPiece))
 			{
+				Console.Write($"{playerName.GetName()} owned piece: ");
 				foreach(Piece piece in playerPiece)
 				{
-					Console.WriteLine($"{playerName.GetName()}, {piece.ID()}");
+					Console.Write($"{piece.ID()} ");
 				}
 			}
 			Console.WriteLine();
 		}
+		Console.WriteLine();
 	}
 	
-	static void CheckPiece(GameRunner game)
+	static bool CheckPiece(GameRunner game, string pieceID)
 	{
 		Dictionary<IPlayer, List<Piece>> piecesList = game.GetPlayerPieces();
 		foreach(var pieces in piecesList)
@@ -170,11 +137,14 @@ class Program
 			{
 				foreach(Piece piece in playerPiece)
 				{
-					Console.WriteLine($"{playerName.GetName()}, {piece.Type()}");
+					if(piece.ID() == pieceID)
+					{
+						return true;
+					}
 				}
 			}
-			Console.WriteLine();
 		}
+		return false;
 	}
 	
 	static void GameStatus(GameRunner game)
@@ -190,16 +160,109 @@ class Program
 		Console.WriteLine(status);
 	}
 
-	static void GetAvailableMove(GameRunner game, string pieceID)
+	static List <Position> GetAvailableMove(GameRunner game, string pieceID)
 	{
 		Piece piece = game.CheckPiece(pieceID);
-		Console.WriteLine(piece);
-		List<Position> pieceAvailableMove = game.GetPieceAvailableMove(piece);
-		
+		List<Position> pieceAvailableMove = game.FilterMove(piece);
+		Console.WriteLine("Available Move: ");
 		foreach(var position in pieceAvailableMove)
 		{
 			Console.WriteLine($"{position.GetRank()}, {position.GetFiles()}");
-			Console.WriteLine();
+		}
+		Console.WriteLine();
+		return pieceAvailableMove;
+	}
+	
+	static bool CheckCoordinate(GameRunner game, string pieceID, int rank, int files)
+	{
+		Piece pieceToMove = game.CheckPiece(pieceID);
+		List <Position> availableMove = game.FilterMove(pieceToMove);
+		foreach(var position in availableMove)
+		{
+			if (position.GetRank() == rank && position.GetFiles() == files)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	static void PlacePiece(GameRunner game, int playerID)
+	{
+		string piece;
+		int rank;
+		int file;
+		bool rankCheck;
+		bool fileCheck;
+		bool checkPieceAvailable;
+		bool checkCoordinate;
+		List <Position> availableMove;
+		
+		if(playerID == 1)
+		{
+			do
+			{
+				do
+				{
+					Console.Write("Select piece to be placed: ");
+					piece = Console.ReadLine();
+					piece = piece.ToUpper();
+					Console.WriteLine("Pass Add Piece");
+					checkPieceAvailable = CheckPiece(game, piece);
+					}while(!checkPieceAvailable);
+				availableMove = GetAvailableMove(game, piece);
+			}while(availableMove.Count == 0);
+			do
+			{
+				Console.WriteLine("Choose coordinate to be moved: ");
+				do
+				{
+					Console.WriteLine("Insert a valid rank");
+					string getRank = Console.ReadLine();
+					rankCheck = int.TryParse(getRank, out rank);
+				}while(!rankCheck);
+				do
+				{
+					Console.WriteLine("Insert a valid file");
+					string getFile = Console.ReadLine();
+					fileCheck = int.TryParse(getFile, out file);
+				}while(!fileCheck);
+				checkCoordinate = CheckCoordinate(game, piece, rank, file);
+			}while(!checkCoordinate);
+			game.Move(piece, rank, file);
+		}
+		else if(playerID == 2)
+		{
+			do
+			{
+				do
+				{
+					Console.Write("Select piece to be placed: ");
+					piece = Console.ReadLine();
+					piece = piece.ToLower();
+					checkPieceAvailable = CheckPiece(game, piece);
+					}while(!checkPieceAvailable);
+				availableMove = GetAvailableMove(game, piece);
+			}while(availableMove.Count == 0);
+			do
+			{
+				Console.WriteLine("Choose coordinate to be moved: ");
+				do
+				{
+					Console.WriteLine("Insert a valid rank");
+					string getRank = Console.ReadLine();
+					rankCheck = int.TryParse(getRank, out rank);
+				}while(!rankCheck);
+				do
+				{
+					Console.WriteLine("Insert a valid file");
+					string getFile = Console.ReadLine();
+					fileCheck = int.TryParse(getFile, out file);
+				}while(!fileCheck);
+				checkCoordinate = CheckCoordinate(game, piece, rank, file);
+			}while(!checkCoordinate);
+			game.Move(piece, rank, file);
 		}
 	}
+	
 }
