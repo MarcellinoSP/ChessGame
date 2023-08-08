@@ -8,6 +8,8 @@ public class GameRunner
 	private Dictionary<IPlayer, PlayerColor> _playerList;
 	private Dictionary<IPlayer, List<Piece>> _piecesList;
 	private GameStatus _gameStatus;
+	private bool _blackPawnMoved;
+	private bool _whitePawnMoved;
 	
 	public GameRunner()
 	{
@@ -16,6 +18,8 @@ public class GameRunner
 		_piecesList = new Dictionary<IPlayer, List<Piece>>();
 		_chessMove = new ChessMove();
 		_currentTurn = PlayerColor.WHITE;
+		_blackPawnMoved = false;
+		_whitePawnMoved = false;
 	}
 	
 	public List<Position> GetPieceAvailableMove(Piece piece)
@@ -172,33 +176,13 @@ public class GameRunner
 		return null;
 	}
 	
-	// public bool Move (string pieceID, int rank, int files)		//HARUSNYA BODY METHOD DIBAWAH GET PIECE POSITION NYA
-	// {
-	// 	List <Position> positionAvailable = GetPieceAvailableMove(pieceID);
-	// 	List <Position> filteredMove = new List <Position>();
-	// 	foreach (var pos in positionAvailable)
-	// 	{
-	// 		int checkRank = pos.GetRank();
-	// 		int checkFiles = pos.GetFiles();
-			
-	// 		bool blocked = IsOccupied(pieceID, checkRank, checkFiles);
-	// 		if (!blocked && IsPathClear(pieceID, checkRank, checkFiles, rank, files))
-	// 		{
-	// 			filteredMove.Add((new Position(checkRank, checkFiles)));
-	// 		}
-	// 	}
-	// 	foreach (var movePos in filteredMove)
-	// 	{
-	// 		Console.WriteLine($"{movePos.GetRank()}, {movePos.GetFiles()} \n");
-	// 	}
-	// 	return false;
-	// }
-	
 	public bool Move(string pieceID, int rank, int files)
 	{
 		Piece pieceToMove = CheckPiece(pieceID);
 		int pieceRank = pieceToMove.GetRank();
 		int pieceFiles = pieceToMove.GetFiles();
+		int index = 1;
+		
 		//Filter Movement Trial
 		List <Position> positionAvailable = GetPieceAvailableMove(pieceToMove);
 		List <Position> filteredMove = new List <Position>();
@@ -207,24 +191,61 @@ public class GameRunner
 		{
 			int checkRank = position.GetRank();
 			int checkFiles = position.GetFiles();
-			
 			bool blocked = IsOccupied(pieceID, checkRank, checkFiles);
-			if(!blocked)
+			
+			//BETTER DELETE LANGSUNG KE DICTIONARY NYA
+			if(pieceID.Contains('P') && pieceToMove is Pawn pawnWhite)
+			{
+				if(pawnWhite.IsMoved() == true && index == 2)
+				{
+					blocked = true;
+				}
+			}
+			else if (pieceID.Contains('p') && pieceToMove is Pawn pawnBlack)
+			{
+				if(pawnBlack.IsMoved() == true && index == 2)
+				{
+					blocked = true;
+				}
+			}
+			//BETTER DELETE LANGSUNG KE DICTIONARY NYA
+			
+			if(pieceID.Contains('N') || pieceID.Contains('n'))
+			{
+				if(!blocked)
+				{
+					filteredMove.Add(new Position(checkRank, checkFiles));
+				}
+			}
+			
+			if(!blocked && IsPathClear(pieceID, checkRank, checkFiles, pieceRank, pieceFiles))
 			{
 				filteredMove.Add(new Position(checkRank, checkFiles));
+				index++;
 			}
 		}
 		
 		foreach(var pos in filteredMove)
 		{
 			Console.WriteLine($"{pos.GetRank()}, {pos.GetFiles()}");
+			if(pos.GetRank() == rank && pos.GetFiles() == files)
+			{
+				bool capture = CapturePiece(pieceID, rank, files);
+				pieceToMove.SetRank(rank);
+				pieceToMove.SetFiles(files);
+				if(pieceToMove is Pawn pawn)
+				{
+					pawn.SetIsMoved(true);
+					Console.WriteLine(pawn.IsMoved());
+				}
+				return true;
+			}
 		}
-		
-		return true;
+		return false;
 	}
 	
 	private bool IsPathClear(string pieceID, int currentRank, int currentFile, int targetRank, int targetFile)
-	{
+	{	
 		int rankDelta = targetRank - currentRank;
 		int fileDelta = targetFile - currentFile;
 
@@ -233,10 +254,9 @@ public class GameRunner
 		
 		int rank = currentRank + rankIncrement;
 		int file = currentFile + fileIncrement;
-
+		
 		while (rank != targetRank || file != targetFile)
 		{
-			Console.WriteLine("while");
 			if (IsOccupied(pieceID, rank, file))
 			{
 				return false;
@@ -250,36 +270,6 @@ public class GameRunner
 		}
 		return true;
 	}
-
-	
-	// public bool Move(string pieceID, int rank, int files)
-	// {
-	// 	// bool occupied = IsOccupied(pieceID, rank, files);
-	// 	// if(!occupied)
-	// 	// {
-	// 		foreach (var playerPieces in _piecesList.Values)
-	// 		{
-	// 			foreach(var piece in playerPieces)
-	// 			{
-	// 				if(piece.ID() == pieceID)
-	// 				{
-	// 					List<Position> positionAvailable = GetPieceAvailableMove(piece);
-	// 					foreach(var position in positionAvailable)
-	// 					{
-	// 						if(position.GetRank() == rank && position.GetFiles() == files)
-	// 						{
-	// 							piece.SetRank(rank);
-	// 							piece.SetFiles(files);
-	// 							return true;
-	// 						}
-	// 					}
-	// 					return false;
-	// 				}
-	// 			}
-	// 		}
-	// 	// }
-	// 	return false;
-	// }
 	
 	public bool IsOccupied(string pieceID, int rank, int files)
 	{
@@ -312,7 +302,7 @@ public class GameRunner
 			{
 				if(piece.GetRank() == rank && piece.GetFiles() == files)
 				{
-					Console.WriteLine($"Occupied by {piece.ID()}");
+					// Console.WriteLine($"Occupied by {piece.ID()}");
 					return true;
 				}
 			}
@@ -366,48 +356,54 @@ public class GameRunner
 		return false;
 	}
 	
-	public bool KingCheckStatus() //LOGIC DIBAWAH MASIH JELEK, BETTER DI ASOSIASI DENGAN MOVEMENT
+	// public bool KingCheckStatus() //LOGIC DIBAWAH MASIH JELEK, BETTER DI ASOSIASI DENGAN MOVEMENT
+	// {
+	// 	int kingRank = 0;
+	// 	int kingFiles = 0;
+	// 	int boardSize = GetBoardBoundary();
+	// 	foreach(var pieceList in _piecesList.Values)
+	// 	{
+	// 		foreach(var piece in pieceList)
+	// 		{
+	// 			if(piece.ID() == "K1")
+	// 			{
+	// 				kingRank = piece.GetRank();
+	// 				kingFiles = piece.GetFiles();
+	// 				Console.WriteLine($"{kingRank}, {kingFiles}");
+	// 			}
+	// 		}
+	// 	}
+	// 	foreach(var pieceList in _piecesList.Values)
+	// 	{
+	// 		foreach(var piece in pieceList)
+	// 		{
+	// 			if(piece.GetFiles() == kingFiles || piece.GetRank() == kingRank)
+	// 			{
+	// 				switch(piece.ID())
+	// 				{
+	// 					case "r1":
+	// 						Console.WriteLine($"Checked by {piece.ID()}!");
+	// 						return true;
+	// 						break;
+	// 					case "r2":
+	// 						Console.WriteLine($"Checked by {piece.ID()}!");
+	// 						return true;
+	// 						break;
+	// 					case "q1":
+	// 						Console.WriteLine($"Checked by {piece.ID()}!");
+	// 						return true;
+	// 						break;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	return false;
+	// }
+	
+	public bool KingCheckStatus()
 	{
-		int kingRank = 0;
-		int kingFiles = 0;
-		int boardSize = 8;
-		foreach(var pieceList in _piecesList.Values)
-		{
-			foreach(var piece in pieceList)
-			{
-				if(piece.ID() == "K1")
-				{
-					kingRank = piece.GetRank();
-					kingFiles = piece.GetFiles();
-					Console.WriteLine($"{kingRank}, {kingFiles}");
-				}
-			}
-		}
-		foreach(var pieceList in _piecesList.Values)
-		{
-			foreach(var piece in pieceList)
-			{
-				if(piece.GetFiles() == kingFiles || piece.GetRank() == kingRank)
-				{
-					switch(piece.ID())
-					{
-						case "r1":
-							Console.WriteLine($"Checked by {piece.ID()}!");
-							return true;
-							break;
-						case "r2":
-							Console.WriteLine($"Checked by {piece.ID()}!");
-							return true;
-							break;
-						case "q1":
-							Console.WriteLine($"Checked by {piece.ID()}!");
-							return true;
-							break;
-					}
-				}
-			}
-		}
-		return false;
+		Piece piece = CheckPiece("K1");
+		return true;
 	}
 	
 	public bool PawnPromotion(Piece piece, PromoteTo promoteTo)

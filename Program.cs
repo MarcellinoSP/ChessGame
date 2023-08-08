@@ -13,7 +13,19 @@ class Program
 		// chessGame.IsOccupied(7,7);
 		// chessGame.CapturePiece("r2", 0, 7);
 		
-		bool tryCheck = chessGame.Move("q1", 7, 0);
+		chessGame.Move("p1", 3, 0);
+		chessGame.Move("p1", 5, 0);
+		// chessGame.Move("P1", 2, 0);
+		// // chessGame.Move("N2", 5, 5);
+		// chessGame.Move("P1", 4, 0);
+		// chessGame.Move("R1", 5, 0);
+		// chessGame.Move("R1", 5, 7);
+		// chessGame.Move("R1", 1, 7);
+		// chessGame.Move("R1", 3, 7);
+		// chessGame.Move("p7", 2, 6);
+		
+		// chessGame.Move("Q1", 5, 5);
+		// Console.WriteLine(tryCheck);
 		// chessGame.Move("R2", 0, 7);
 
 		DrawBoard(chessGame);

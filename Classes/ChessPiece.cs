@@ -235,6 +235,12 @@ public class Pawn : Piece			//DONE
 		return true;
 	}
 	
+	public bool SetIsMoved(bool setCondition)
+	{
+		_isMoved = setCondition;
+		return _isMoved;
+	}
+	
 	public bool IsMoved()
 	{
 		return _isMoved;

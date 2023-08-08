@@ -32,7 +32,6 @@ public class ChessMove
 			var moveSet = moveCoordinateList.Value;
 			if(pieces.Type() == piece.Type())
 			{
-				// Console.WriteLine(moveSet);
 				return moveSet;
 			}
 		}
@@ -47,14 +46,17 @@ public class PawnMoveSingle : IMoveSet		//DONE, BUT NOT YET TESTED
 		List<Position> availablePosition = new List<Position>();
 		int rank = piece.GetRank();
 		int files = piece.GetFiles();
+		Console.WriteLine("Pass This Line Pawn Move Single");
 		
 		if(piece.ID().Any(Char.IsUpper))
 		{
 			availablePosition.Add(new Position(rank - 1, files));
+			availablePosition.Add(new Position(rank - 2, files));
 		}
 		else
 		{
 			availablePosition.Add(new Position(rank + 1, files));
+			availablePosition.Add(new Position(rank + 2, files));
 		}
 
 		//Filter unnecessary position
@@ -62,22 +64,6 @@ public class PawnMoveSingle : IMoveSet		//DONE, BUT NOT YET TESTED
 		return availablePosition;
 	}
 }
-
-// public class PawnMoveDouble : IMoveSet
-// {
-// 	public Position pieceMove()
-// 	{
-// 		Position position = new();
-// 		int currentRank = position.GetRank();
-// 		int currentFiles = position.GetFiles();
-// 		for(int i = 1; i < 8; i++)
-// 		{
-// 			currentRank += 2;
-// 			position.SetRank(currentRank);
-// 		}
-// 		return position;
-// 	}
-// }
 
 // public class PawnEnPassant : IMoveSet
 // {
@@ -102,10 +88,14 @@ public class KnightMoveSet : IMoveSet		//DONE
 		int rank = piece.GetRank();
 		int files = piece.GetFiles();
 		
-		availablePosition.Add(new Position(rank + 1, files + 2));
-		availablePosition.Add(new Position(rank - 1, files - 2));
-		availablePosition.Add(new Position(rank + 1, files - 2));
-		availablePosition.Add(new Position(rank - 1, files + 2));
+		availablePosition.Add(new Position (rank + 1, files + 2));
+		availablePosition.Add(new Position (rank - 1, files - 2));
+		availablePosition.Add(new Position (rank + 1, files - 2));
+		availablePosition.Add(new Position (rank - 1, files + 2));
+		availablePosition.Add(new Position (rank + 2, files + 1));
+		availablePosition.Add(new Position (rank - 2, files + 1));
+		availablePosition.Add(new Position (rank + 2, files - 1));
+		availablePosition.Add(new Position (rank - 2, files - 1));
 		
 		//Filter unnecessary position
 		availablePosition.RemoveAll(move => move.GetRank() < 0 || move.GetFiles() > 7 || move.GetRank() > 7 || move.GetFiles() < 0);
