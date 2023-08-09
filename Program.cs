@@ -1,10 +1,11 @@
-﻿#define RUN
+﻿#define TEST
 using ChessGame;
 
 class Program
 {
 	static void Main()
 	{
+		#if RUN
 		string gameStatus;
 		PieceList listAdd = new();
 		GameRunner chessGame = new GameRunner();
@@ -16,7 +17,6 @@ class Program
 		Console.ReadKey();
 		Console.Clear();
 		
-		#if RUN
 		gameStatus = GameStatus(chessGame);
 		do
 		{
@@ -33,8 +33,27 @@ class Program
 		Console.WriteLine($"Game finsihed with {gameStatus}");
 		
 		#elif TEST
-			chessGame.Move("P1", 5, 0);
-			DrawBoard(chessGame);
+			GameRunner chessGame = new();
+			//UNHANDLED EXCEPTION??
+			PieceList listTrial = new();
+			listTrial.AddWhitePiece();
+			listTrial.GenerateJSON();
+			//UNHANDLED EXCEPTION??
+			//WUT DE HECK IS WRONG WITH ISERIALIZABLE?
+			
+			// IPlayer player1 = new HumanPlayer();
+			// player1.SetName("Test Unit 1");
+			// player1.SetUID(1);
+			// chessGame.AddPlayer(player1);
+			
+			// IPlayer player2 = new HumanPlayer();
+			// player1.SetName("Test Unit 2");
+			// player2.SetUID(2);
+			// chessGame.AddPlayer(player2);
+			
+			// chessGame.InitializePieces();
+			// chessGame.SetBoardBoundary(8);
+			// DrawBoard(chessGame);
 		#endif
 	}
 
@@ -216,7 +235,6 @@ class Program
 					Console.Write("Select piece to be placed: ");
 					piece = Console.ReadLine();
 					piece = piece.ToUpper();
-					Console.WriteLine("Pass Add Piece");
 					checkPieceAvailable = CheckPiece(game, piece);
 					}while(!checkPieceAvailable);
 				availableMove = GetAvailableMove(game, piece);

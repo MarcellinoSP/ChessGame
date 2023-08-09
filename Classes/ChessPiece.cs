@@ -1,18 +1,17 @@
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 
 namespace ChessGame;
 
 [DataContract]
-//ABSTRACT DIBENERIN BIAR METHOD NYA ABSTRACT SEMUA
 public abstract class Piece
 {
-	
+	[DataMember]
 	protected bool captured;
 	[DataMember]
 	protected Position position;
 	[DataMember]
 	protected string? _pieceType;
+	[DataMember]
 	protected string? _pieceID;
 	
 	public Piece()
@@ -40,9 +39,12 @@ public abstract class Piece
 	public abstract bool GetStatus();
 }
 
+[DataContract]
 public class King : Piece			//DONE
 {
+	[DataMember]
 	private bool _castlingDone;
+	[DataMember]
 	private bool _isMoved = false;
 	
 	public King()
@@ -138,10 +140,14 @@ public class King : Piece			//DONE
 	}
 }
 
+[DataContract]
 public class Pawn : Piece			//DONE
 {
+	[DataMember]
 	private bool _promotionStatus;
+	[DataMember]
 	private bool _enPassantStatus;
+	[DataMember]
 	private bool _isMoved = false;
 	
 	public Pawn()
@@ -247,6 +253,7 @@ public class Pawn : Piece			//DONE
 	}
 }
 
+[DataContract]
 public class Rook : Piece			//DONE
 {
 	public Rook(int rank, int files, string type)
@@ -319,6 +326,7 @@ public class Rook : Piece			//DONE
 	}
 }
 
+[DataContract]
 public class Queen : Piece			//DONE
 {
 	public Queen(int rank, int files, string type)
@@ -386,6 +394,7 @@ public class Queen : Piece			//DONE
 	}
 }
 
+[DataContract]
 public class Knight : Piece			//DONE
 {
 	public Knight()
@@ -458,6 +467,7 @@ public class Knight : Piece			//DONE
 	}
 }
 
+[DataContract]
 public class Bishop : Piece			//DONE
 {
 	public Bishop(int rank, int files, string type)

@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 
 namespace ChessGame;
@@ -9,23 +8,23 @@ public class PieceList
 	
 	public void AddWhitePiece()
 	{
-		pieceListWhite.Add(new Pawn (6, 0, "P1"));
-		pieceListWhite.Add(new Pawn (6, 1, "P2"));
-		pieceListWhite.Add(new Pawn (6, 2, "P3"));
-		pieceListWhite.Add(new Pawn (6, 3, "P4"));
-		pieceListWhite.Add(new Pawn (6, 4, "P5"));
-		pieceListWhite.Add(new Pawn (6, 5, "P6"));
-		pieceListWhite.Add(new Pawn (6, 6, "P7"));
-		pieceListWhite.Add(new Pawn (6, 7, "P8"));
+		pieceListWhite.Add(new Pawn (6, 0, "Pawn", "P1"));
+		pieceListWhite.Add(new Pawn (6, 1, "Pawn", "P2"));
+		pieceListWhite.Add(new Pawn (6, 2, "Pawn", "P3"));
+		pieceListWhite.Add(new Pawn (6, 3, "Pawn", "P4"));
+		pieceListWhite.Add(new Pawn (6, 4, "Pawn", "P5"));
+		pieceListWhite.Add(new Pawn (6, 5, "Pawn", "P6"));
+		pieceListWhite.Add(new Pawn (6, 6, "Pawn", "P7"));
+		pieceListWhite.Add(new Pawn (6, 7, "Pawn", "P8"));
 		
-		pieceListWhite.Add(new Rook (7, 0, "R1"));
-		pieceListWhite.Add(new Knight (7, 1, "N1"));
-		pieceListWhite.Add(new Bishop (7, 2, "B1"));
-		pieceListWhite.Add(new Queen (7, 3, "Q1"));
-		pieceListWhite.Add(new King (7, 4, "K1"));
-		pieceListWhite.Add(new Bishop (7, 5, "B2"));
-		pieceListWhite.Add(new Knight (7, 6, "N2"));
-		pieceListWhite.Add(new Rook (7, 7, "R2"));
+		pieceListWhite.Add(new Rook (7, 0, "Rook", "R1"));
+		pieceListWhite.Add(new Knight (7, 1, "Knight", "N1"));
+		pieceListWhite.Add(new Bishop (7, 2, "Bishop", "B1"));
+		pieceListWhite.Add(new Queen (7, 3, "Queen", "Q1"));
+		pieceListWhite.Add(new King (7, 4, "King", "K1"));
+		pieceListWhite.Add(new Bishop (7, 5, "Bishop", "B2"));
+		pieceListWhite.Add(new Knight (7, 6, "Knight", "N2"));
+		pieceListWhite.Add(new Rook (7, 7, "Rook", "R2"));
 	}	
 	
 	// public List<Piece> pieceListBlack = new List<Piece>

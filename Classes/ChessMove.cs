@@ -1,6 +1,7 @@
 namespace ChessGame;
 public class ChessMove
 {
+	private ChessBoard chessBoard = new();
 	private Dictionary <Piece, IMoveSet> _moveSet = new Dictionary<Piece, IMoveSet>();
 	private int _moveBoundary;
 	
@@ -12,6 +13,7 @@ public class ChessMove
 		_moveSet.Add(new Bishop("Bishop"), new BishopMoveSet());
 		_moveSet.Add(new Queen("Queen"), new QueenMoveSet());
 		_moveSet.Add(new King("King"), new KingMoveSet());
+		_moveBoundary = chessBoard.GetBoardSize();
 	}
 	public bool AddPiece(KeyValuePair<Piece, IMoveSet> addPiece)	//KALAU LANGSUNG DI ASSIGN?
 	{
