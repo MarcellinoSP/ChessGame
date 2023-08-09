@@ -1,10 +1,11 @@
-﻿using ChessGame;
-using System;
+﻿#define RUN
+using ChessGame;
 
 class Program
 {
 	static void Main()
 	{
+		string gameStatus;
 		PieceList listAdd = new();
 		GameRunner chessGame = new GameRunner();
 		AddPlayer(chessGame);
@@ -15,19 +16,26 @@ class Program
 		Console.ReadKey();
 		Console.Clear();
 		
-		while(true)
+		#if RUN
+		gameStatus = GameStatus(chessGame);
+		do
 		{
-			GameStatus(chessGame);
+			Console.WriteLine(gameStatus);
 			DrawBoard(chessGame);
-			bool check = chessGame.KingCheckStatus();
-			Console.WriteLine($"King is in threat: {check}");
+			// chessGame.KingCheckStatus();
 			IPlayer player = chessGame.GetCurrentTurn();
 			Console.WriteLine($"Current turn: {player.GetName()}");
 			int playerID = player.GetUID();
 			PlacePiece(chessGame, playerID);
-			Console.ReadKey();
+			gameStatus = GameStatus(chessGame);
 			Console.Clear();
-		}
+		}while(gameStatus == "ONGOING");
+		Console.WriteLine($"Game finsihed with {gameStatus}");
+		
+		#elif TEST
+			chessGame.Move("P1", 5, 0);
+			DrawBoard(chessGame);
+		#endif
 	}
 
 	static void InitializeBoard(GameRunner game)
@@ -52,7 +60,11 @@ class Program
 	static void DrawBoard(GameRunner game)
 	{
 		int boardSize = game.GetBoardBoundary();
-		Console.WriteLine("+----+----+----+----+----+----+----+----+");
+		for(int board = 0; board < boardSize; board++)
+		{
+			Console.Write("+----");
+		}
+		Console.WriteLine("+");
 		for(int i = 0; i < boardSize; i++)
 		{
 			for(int j = 0; j < boardSize; j++)
@@ -68,7 +80,11 @@ class Program
 				}
 			}
 			Console.WriteLine("|");
-	   		Console.WriteLine("+----+----+----+----+----+----+----+----+");
+		for(int board = 0; board < boardSize; board++)
+		{
+			Console.Write("+----");
+		}
+		Console.WriteLine("+");
 		}
 		Console.WriteLine("");
 	}
@@ -147,17 +163,10 @@ class Program
 		return false;
 	}
 	
-	static void GameStatus(GameRunner game)
+	static string GameStatus(GameRunner game)
 	{
 		GameStatus status = game.CheckGameStatus();
-
-		// switch(status)
-		// {
-		// 	case GameStatus.BLACK_WIN:
-		// 		Console.WriteLine("Black Side Win");
-		// 	break;
-		// }
-		Console.WriteLine(status);
+		return status.ToString();
 	}
 
 	static List <Position> GetAvailableMove(GameRunner game, string pieceID)

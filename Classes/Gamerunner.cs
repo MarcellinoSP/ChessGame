@@ -315,6 +315,14 @@ public class GameRunner
 						{
 							piece.ChangeStatus();
 							playerPieces.Remove(piece);
+							if(piece.ID() == "K1")
+							{
+								SetGameStatus(GameStatus.BLACK_WIN);
+							}
+							else if(piece.ID() == "k1")
+							{
+								SetGameStatus(GameStatus.WHITE_WIN);
+							}
 							return true;
 						}
 					}
@@ -342,6 +350,14 @@ public class GameRunner
 				if(status)
 				{
 					pieces.Remove(piece);
+					if(piece.ID() == "K1")
+					{
+						SetGameStatus(GameStatus.BLACK_WIN);
+					}
+					else if(piece.ID() == "k1")
+					{
+						SetGameStatus(GameStatus.WHITE_WIN);
+					}
 					return true;
 				}
 			}
@@ -383,12 +399,12 @@ public class GameRunner
 	
 	public bool KingCheckStatus()
 	{
+		int boardSize = GetBoardBoundary();
 		if(_currentTurn == PlayerColor.WHITE)
 		{
 			Piece king = CheckPiece("K1");
 			int kingRank = king.GetRank();
 			int kingFiles = king.GetFiles();
-			int boardSize = GetBoardBoundary();
 			foreach(var pieceList in _piecesList.Values)
 			{
 				foreach(var piece in pieceList)
@@ -401,9 +417,9 @@ public class GameRunner
 							bool threat2 = IsOccupied("K1", kingRank, kingFiles - i);
 							bool threat3 = IsOccupied("K1", kingRank + i, kingFiles);
 							bool threat4 = IsOccupied("K1", kingRank, kingFiles + i);
-							if(threat1 || threat2 || threat3 || threat4)
+							if(!threat1 || !threat2 || !threat3 || !threat4)
 							{
-								return false;
+								SetGameStatus(GameStatus.CHECK);
 							}
 						}
 					}
@@ -415,9 +431,9 @@ public class GameRunner
 							bool threat2 = IsOccupied("K1", kingRank + i, kingFiles - i);
 							bool threat3 = IsOccupied("K1", kingRank - i, kingFiles + i);
 							bool threat4 = IsOccupied("K1", kingRank - i, kingFiles - i);
-							if(threat1 || threat2 || threat3 || threat4)
+							if(!threat1 || !threat2 || !threat3 || !threat4)
 							{
-								return false;
+								SetGameStatus(GameStatus.CHECK);
 							}
 						}
 					}
@@ -429,41 +445,7 @@ public class GameRunner
 			Piece king = CheckPiece("k1");
 			int kingRank = king.GetRank();
 			int kingFiles = king.GetFiles();
-			int boardSize = GetBoardBoundary();
-			foreach(var pieceList in _piecesList.Values)
-			{
-				foreach(var piece in pieceList)
-				{
-					if(piece is Rook && piece.ID().Contains('R'))
-					{
-						for(int i = 1; i < boardSize; i++)
-						{
-							bool threat1 = IsOccupied("k1", kingRank - i, kingFiles);
-							bool threat2 = IsOccupied("k1", kingRank, kingFiles - i);
-							bool threat3 = IsOccupied("k1", kingRank + i, kingFiles);
-							bool threat4 = IsOccupied("k1", kingRank, kingFiles + i);
-							if(threat1 || threat2 || threat3 || threat4)
-							{
-								return false;
-							}
-						}
-					}
-					if(piece is Bishop && piece.ID().Contains('B'))
-					{
-						for(int i = 1; i < boardSize; i++)
-						{
-							bool threat1 = IsOccupied("k1", kingRank + i, kingFiles + i);
-							bool threat2 = IsOccupied("k1", kingRank + i, kingFiles - i);
-							bool threat3 = IsOccupied("k1", kingRank - i, kingFiles + i);
-							bool threat4 = IsOccupied("k1", kingRank - i, kingFiles - i);
-							if(threat1 || threat2 || threat3 || threat4)
-							{
-								return false;
-							}
-						}
-					}
-				}
-			}
+			return false;
 		}
 		return true;
 	}
