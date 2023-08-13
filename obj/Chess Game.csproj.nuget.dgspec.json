@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {}
+    "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {}
   },
   "projects": {
-    "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {
+    "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
         "projectName": "Chess Game",
-        "projectPath": "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
+        "projectPath": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\obj\\",
+        "outputPath": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "NLog": {
+              "target": "Package",
+              "version": "[5.2.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

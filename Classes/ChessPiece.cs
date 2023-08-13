@@ -3,6 +3,12 @@ using System.Runtime.Serialization;
 namespace ChessGame;
 
 [DataContract]
+[KnownType(typeof(Pawn))]
+[KnownType(typeof(Bishop))]
+[KnownType(typeof(Rook))]
+[KnownType(typeof(Knight))]
+[KnownType(typeof(Queen))]
+[KnownType(typeof(King))]
 public abstract class Piece
 {
 	[DataMember]

@@ -1,5 +1,6 @@
 ﻿#define TEST
 using ChessGame;
+using NLog;
 
 class Program
 {
@@ -34,26 +35,47 @@ class Program
 		
 		#elif TEST
 			GameRunner chessGame = new();
-			//UNHANDLED EXCEPTION??
-			PieceList listTrial = new();
-			listTrial.AddWhitePiece();
-			listTrial.GenerateJSON();
-			//UNHANDLED EXCEPTION??
+			IPlayer player1 = new HumanPlayer();
+			player1.SetName("Test Unit 1");
+			player1.SetUID(1);
+			chessGame.AddPlayer(player1);
+			
+			IPlayer player2 = new HumanPlayer();
+			player2.SetName("Test Unit 2");
+			player2.SetUID(2);
+			chessGame.AddPlayer(player2);
+			
+			IPlayer player = chessGame.GetCurrentTurn();
+			Console.WriteLine(player.GetName());
+			
+			chessGame.InitializePieces();
+			chessGame.SetBoardBoundary(8);
+			chessGame.Move("P5", 4, 4);
+			chessGame.Move("K1", 6, 4);
+			chessGame.Move("K1", 5, 5);
+			
+			// chessGame.Move("p8", 3, 7);
+			// chessGame.Move("r2", 2, 7);
+			// chessGame.Move("r2", 2, 5);
+			
+			chessGame.Move("p4", 2, 3);
+			chessGame.Move("b1", 3, 5);
+			
+			
+			bool kingStatus = chessGame.KingCheckStatus();
+			DrawBoard(chessGame);
+			Console.WriteLine(kingStatus);
+			
+			// GameLogger logger = new();
+			// Logger log = logger.GetLogger();
+			// log.Trace("Tracing Trial");
+			// //UNHANDLED EXCEPTION??
+			// PieceList listTrial = new();
+			// listTrial.AddWhitePiece();
+			// listTrial.GenerateJSON();
+			// //UNHANDLED EXCEPTION??
 			//WUT DE HECK IS WRONG WITH ISERIALIZABLE?
-			
-			// IPlayer player1 = new HumanPlayer();
-			// player1.SetName("Test Unit 1");
-			// player1.SetUID(1);
-			// chessGame.AddPlayer(player1);
-			
-			// IPlayer player2 = new HumanPlayer();
-			// player1.SetName("Test Unit 2");
-			// player2.SetUID(2);
-			// chessGame.AddPlayer(player2);
-			
-			// chessGame.InitializePieces();
-			// chessGame.SetBoardBoundary(8);
-			// DrawBoard(chessGame);
+			//Add known type to abstract is the solve!
 		#endif
 	}
 
@@ -79,6 +101,11 @@ class Program
 	static void DrawBoard(GameRunner game)
 	{
 		int boardSize = game.GetBoardBoundary();
+		for(int rank = 0; rank < boardSize; rank++)
+		{
+			Console.Write($"  {rank}  ");
+		}
+		Console.WriteLine();
 		for(int board = 0; board < boardSize; board++)
 		{
 			Console.Write("+----");
@@ -98,7 +125,7 @@ class Program
 					Console.Write("|    ");
 				}
 			}
-			Console.WriteLine("|");
+			Console.WriteLine($"| {i}");
 		for(int board = 0; board < boardSize; board++)
 		{
 			Console.Write("+----");

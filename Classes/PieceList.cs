@@ -1,9 +1,14 @@
 using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace ChessGame;
 
 public class PieceList
 {
+	public static readonly DataContractJsonSerializerSettings Settings = 
+					new DataContractJsonSerializerSettings
+					{ UseSimpleDictionaryFormat = true };
+					
 	public List<Piece> pieceListWhite = new List<Piece>();
 	
 	public void AddWhitePiece()
@@ -50,21 +55,12 @@ public class PieceList
 	
 	public void GenerateJSON()
 	{
-		// string jsonString = JsonSerializer.Serialize(pieceListBlack);
-		// using (StreamWriter writer1 = new("BlackPiece.json"))
-		// {
-		// 	writer1.WriteLine(jsonString);
-		// }
-		
-		var json1 = new DataContractJsonSerializer(typeof(List<Piece>));
-		using(FileStream stream = new FileStream("WhitePiece.json", FileMode.OpenOrCreate))
+		FileStream stream = new FileStream("WhitePiece.json", FileMode.Create);
+		using (var writer = JsonReaderWriterFactory.CreateJsonWriter(stream, Encoding.UTF8, true, true, "  "))
 		{
-			json1.WriteObject(stream, pieceListWhite);
+			var json1 = new DataContractJsonSerializer(typeof(List<Piece>), Settings);
+			json1.WriteObject(writer, pieceListWhite);
+			stream.Flush();
 		}
-		
-		// using (StreamWriter writer2 = new("WhitePiece.json", FileMode.OpenOrCreate))
-		// {
-		// 	writer2.WriteLine(jsonString1);
-		// }
 	}
 }

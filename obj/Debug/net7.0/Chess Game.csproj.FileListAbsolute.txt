@@ -73,3 +73,5 @@ C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\De
 C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.pdb
 C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.genruntimeconfig.cache
 C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\ref\Chess Game.dll
+C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\bin\Debug\net7.0\NLog.dll
+C:\Users\user\Documents\Berkas Daftar Kerja\Chess Game Project\Chess Game\obj\Debug\net7.0\Chess Game.csproj.CopyComplete
