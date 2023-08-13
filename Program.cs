@@ -56,10 +56,16 @@ class Program
 			
 			// chessGame.Move("p8", 3, 7);
 			// chessGame.Move("r2", 2, 7);
-			// chessGame.Move("r2", 2, 5);
+			// chessGame.Move("r2", 2, 6);
 			
-			chessGame.Move("p4", 2, 3);
-			chessGame.Move("b1", 3, 5);
+			chessGame.Move("p4", 3, 3);
+			chessGame.Move("p5", 2, 4);
+			chessGame.Move("b2", 2, 3);
+			chessGame.Move("n2", 2, 7);
+			chessGame.Move("n2", 3, 5);
+			chessGame.Move("n2", 4, 3);
+			chessGame.Move("K1", 4, 5);
+			// chessGame.Move("n2", 2, 4);
 			
 			
 			bool kingStatus = chessGame.KingCheckStatus();

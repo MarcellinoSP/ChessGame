@@ -83,4 +83,44 @@
 				}
 			}
 		}
+
+		// for(int i = 1; i < boardSize; i++)
+							// {
+							// 	bool blockedUp = IsOccupied("K1", kingRank - i, kingFiles);
+							// 	bool blockedRight = IsOccupied("K1", kingRank, kingFiles - i);
+							// 	bool blockedBottom = IsOccupied("K1", kingRank + i, kingFiles);
+							// 	bool blockedLeft = IsOccupied("K1", kingRank, kingFiles + i);
+							// 	if(!blockedUp || !blockedRight || !blockedBottom || !blockedLeft)
+							// 	{
+							// 		SetGameStatus(GameStatus.CHECK);
+							// 		return true;
+							// 	}
+							// }
+
+		for(int i = 1; i < boardSize; i++)
+							{
+								bool blockedUp = IsOccupied("K1", kingRank + i, kingFiles + i);
+								bool blockedRight = IsOccupied("K1", kingRank + i, kingFiles - i);
+								bool blockedBottom = IsOccupied("K1", kingRank - i, kingFiles + i);
+								bool blockedLeft = IsOccupied("K1", kingRank - i, kingFiles - i);
+								if(!blockedUp || !blockedRight || !blockedBottom || !blockedLeft)
+								{
+									SetGameStatus(GameStatus.CHECK);
+									return true;
+								}
+							}
+							
+		for(int i = 1; i < boardSize; i++)
+							{
+								bool blockedUp = IsOccupied("K1", kingRank - i, kingFiles);
+								bool blockedRight = IsOccupied("K1", kingRank, kingFiles - i);
+								bool blockedBottom = IsOccupied("K1", kingRank + i, kingFiles);
+								bool blockedLeft = IsOccupied("K1", kingRank, kingFiles + i);
+								
+								if(!blockedUp || !blockedRight || !blockedBottom || !blockedLeft)
+								{
+									SetGameStatus(GameStatus.CHECK);
+									return true;
+								}
+							}
 ```
