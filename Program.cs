@@ -1,4 +1,4 @@
-﻿#define TEST
+﻿#define RUN
 using ChessGame;
 using NLog;
 
@@ -7,30 +7,37 @@ class Program
 	static void Main()
 	{
 		#if RUN
+		GameLogger logger = new();
+		Logger log = logger.GetLogger();
 		string gameStatus;
 		PieceList listAdd = new();
+		log.Info("Initializing GameRunner");
 		GameRunner chessGame = new GameRunner();
+		log.Info("Initializing Player");
 		AddPlayer(chessGame);
 		PlayerList(chessGame);
+		log.Info("Initializing Board");
 		InitializeBoard(chessGame);
 		PieceInitializing(chessGame);
 		Console.WriteLine("Press any key to start the game");
 		Console.ReadKey();
+		log.Info("Game begin");
 		Console.Clear();
 		
 		gameStatus = GameStatus(chessGame);
 		do
 		{
 			Console.WriteLine(gameStatus);
+			bool kingChecked = chessGame.KingCheckStatus();
 			DrawBoard(chessGame);
-			// chessGame.KingCheckStatus();
 			IPlayer player = chessGame.GetCurrentTurn();
+			Console.WriteLine($"King checked status: {kingChecked}");
 			Console.WriteLine($"Current turn: {player.GetName()}");
 			int playerID = player.GetUID();
 			PlacePiece(chessGame, playerID);
 			gameStatus = GameStatus(chessGame);
 			Console.Clear();
-		}while(gameStatus == "ONGOING");
+		}while(gameStatus == "ONGOING" || gameStatus == "CHECK");
 		Console.WriteLine($"Game finsihed with {gameStatus}");
 		
 		#elif TEST
@@ -46,38 +53,24 @@ class Program
 			chessGame.AddPlayer(player2);
 			
 			IPlayer player = chessGame.GetCurrentTurn();
-			Console.WriteLine(player.GetName());
 			
 			chessGame.InitializePieces();
 			chessGame.SetBoardBoundary(8);
-			chessGame.Move("P5", 4, 4);
-			chessGame.Move("K1", 6, 4);
-			chessGame.Move("K1", 5, 5);
-			
-			// chessGame.Move("p8", 3, 7);
-			// chessGame.Move("r2", 2, 7);
-			// chessGame.Move("r2", 2, 6);
-			
-			chessGame.Move("p4", 3, 3);
-			chessGame.Move("p5", 2, 4);
-			chessGame.Move("b2", 2, 3);
-			chessGame.Move("n2", 2, 7);
-			chessGame.Move("n2", 3, 5);
-			chessGame.Move("n2", 4, 3);
-			chessGame.Move("K1", 4, 5);
-			// chessGame.Move("n2", 2, 4);
-			
 			
 			bool kingStatus = chessGame.KingCheckStatus();
 			DrawBoard(chessGame);
 			Console.WriteLine(kingStatus);
 			
+			Piece piece = chessGame.CheckPiece("P1");
+			Console.WriteLine(piece.GetRank());
+						
 			// GameLogger logger = new();
 			// Logger log = logger.GetLogger();
 			// log.Trace("Tracing Trial");
 			// //UNHANDLED EXCEPTION??
 			// PieceList listTrial = new();
 			// listTrial.AddWhitePiece();
+			// listTrial.AddBlackPiece();
 			// listTrial.GenerateJSON();
 			// //UNHANDLED EXCEPTION??
 			//WUT DE HECK IS WRONG WITH ISERIALIZABLE?
@@ -228,7 +221,7 @@ class Program
 		Console.WriteLine("Available Move: ");
 		foreach(var position in pieceAvailableMove)
 		{
-			Console.WriteLine($"{position.GetRank()}, {position.GetFiles()}");
+			Console.Write($"({position.GetRank()}, {position.GetFiles()}) ");
 		}
 		Console.WriteLine();
 		return pieceAvailableMove;

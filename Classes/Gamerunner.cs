@@ -1,3 +1,6 @@
+using System.Runtime.Serialization.Json;
+using System.Text;
+
 namespace ChessGame;
 
 public delegate void SwitchPlayer();
@@ -27,23 +30,6 @@ public class GameRunner
 		IMoveSet moveSet = _chessMove.GetMoveSet(piece);
 		List<Position> pieceMovement = moveSet.movement(piece);
 		return pieceMovement;
-	}
-	
-	public List <Position> GetPieceAvailableMove(string pieceID)
-	{
-		foreach (var playerPiece in _piecesList.Values)
-		{
-			foreach (var piece in playerPiece)
-			{
-				if(piece.ID() == pieceID)
-				{
-					IMoveSet moveSet = _chessMove.GetMoveSet(piece);
-					List <Position> pieceMovement = moveSet.movement(piece);
-					return pieceMovement;
-				}
-			}
-		}
-		return null;
 	}
 	
 	public bool? AddPlayer(IPlayer player)
@@ -94,7 +80,7 @@ public class GameRunner
 		return _piecesList;
 	}
 	
-	public bool InitializePieces()		//DIUBAH PAKE JSON BIAR SIMPEL
+	public bool InitializePieces()
 	{
 		int i = 0;
 		foreach(var player in _playerList.Keys)
@@ -102,44 +88,24 @@ public class GameRunner
 			List <Piece> pieces = new List<Piece>();
 			if(i == 0)
 			{
-				pieces.Add(new Pawn (6, 0, "Pawn", "P1"));
-				pieces.Add(new Pawn (6, 1, "Pawn", "P2"));
-				pieces.Add(new Pawn (6, 2, "Pawn", "P3"));
-				pieces.Add(new Pawn (6, 3, "Pawn", "P4"));
-				pieces.Add(new Pawn (6, 4, "Pawn", "P5"));
-				pieces.Add(new Pawn (6, 5, "Pawn", "P6"));
-				pieces.Add(new Pawn (6, 6, "Pawn", "P7"));
-				pieces.Add(new Pawn (6, 7, "Pawn", "P8"));
-				
-				pieces.Add(new Rook (7, 0, "Rook", "R1"));
-				pieces.Add(new Knight (7, 1, "Knight", "N1"));
-				pieces.Add(new Bishop (7, 2, "Bishop", "B1"));
-				pieces.Add(new Queen (7, 3, "Queen", "Q1"));
-				pieces.Add(new King (7, 4, "King", "K1"));
-				pieces.Add(new Bishop (7, 5, "Bishop", "B2"));
-				pieces.Add(new Knight (7, 6, "Knight", "N2"));
-				pieces.Add(new Rook (7, 7, "Rook", "R2"));
+				var whitePiece = new DataContractJsonSerializer(typeof(List <Piece>));
+				string path = Directory.GetCurrentDirectory();
+				string fullPath = Path.Combine(path, "WhitePiece.json");
+				using (FileStream stream = new FileStream(fullPath, FileMode.OpenOrCreate))
+				{
+					pieces = (List <Piece>)whitePiece.ReadObject(stream);
+				}
 				i++;
 			}
 			else
 			{
-				pieces.Add(new Pawn (1, 0, "Pawn", "p1"));
-				pieces.Add(new Pawn (1, 1, "Pawn", "p2"));
-				pieces.Add(new Pawn (1, 2, "Pawn", "p3"));
-				pieces.Add(new Pawn (1, 3, "Pawn", "p4"));
-				pieces.Add(new Pawn (1, 4, "Pawn", "p5"));
-				pieces.Add(new Pawn (1, 5, "Pawn", "p6"));
-				pieces.Add(new Pawn (1, 6, "Pawn", "p7"));
-				pieces.Add(new Pawn (1, 7, "Pawn", "p8"));
-				
-				pieces.Add(new Rook (0, 0, "Rook", "r1"));
-				pieces.Add(new Knight (0, 1, "Knight", "n1"));
-				pieces.Add(new Bishop (0, 2, "Bishop", "b1"));
-				pieces.Add(new Queen (0, 3, "Queen", "q1"));
-				pieces.Add(new King (0, 4, "King", "k1"));
-				pieces.Add(new Bishop (0, 5, "Bishop", "b2"));
-				pieces.Add(new Knight (0, 6, "Knight", "n2"));
-				pieces.Add(new Rook (0, 7, "Rook", "r2"));
+				var blackPiece = new DataContractJsonSerializer(typeof(List <Piece>));
+				string path = Directory.GetCurrentDirectory();
+				string fullPath = Path.Combine(path, "BlackPiece.json");
+				using (FileStream stream = new FileStream(fullPath, FileMode.OpenOrCreate))
+				{
+					pieces = (List <Piece>)blackPiece.ReadObject(stream);
+				}
 			}
 			_piecesList[player] = pieces;
 		}
@@ -148,32 +114,18 @@ public class GameRunner
 	
 	public Piece? CheckPiece(int rank, int files)
 	{
-   		foreach (var playerPieces in _piecesList.Values)
-   		{
-	  		foreach (var piece in playerPieces)
-	  		{
-		 		if (piece.GetRank() == rank && piece.GetFiles() == files)
-		 		{
-					return piece; 
-		 		}
-	  		}
-   		}
-   		return null; 
+		var foundPiece = _piecesList.Values
+						.SelectMany(playerPieces => playerPieces)
+						.FirstOrDefault(p => p.GetRank() == rank && p.GetFiles() == files);
+		return foundPiece;
 	}
 	
 	public Piece? CheckPiece(string pieceID)
 	{
-		foreach (var playerPieces in _piecesList.Values)
-		{
-			foreach (var piece in playerPieces)
-			{
-				if (piece.ID().Equals(pieceID))
-				{
-					return piece;
-				}
-			}
-		}
-		return null;
+		var foundPiece = _piecesList.Values
+						.SelectMany(playerPieces => playerPieces)
+						.FirstOrDefault(piece => piece.ID().Equals(pieceID));
+		return foundPiece;
 	}
 	
 	public List <Position> FilterMove(Piece piece)
@@ -191,15 +143,14 @@ public class GameRunner
 			int checkFiles = position.GetFiles();
 			bool blocked = IsOccupied(pieceID, checkRank, checkFiles);
 
-			if (pieceID.Contains('P'))
+			if (pieceID.Contains('P') || pieceID.Contains('p'))
 			{
-				// Console.WriteLine($"{pieceRank}, {pieceFiles}");
-				bool occupiedLeft = IsOccupied(pieceID, pieceRank - 1, pieceFiles + 1);
-				// Console.WriteLine($"{pieceRank - 1}, {pieceFiles + 1}");
-				// Console.WriteLine(occupiedLeft);
+				if(!IsOccupied(checkRank, checkFiles))
+				{
+					filteredMove.Add(new Position(checkRank, checkFiles));
+				}
 			}
-			
-			if ((pieceID.Contains('N') || pieceID.Contains('n')) && !blocked)
+			else if ((pieceID.Contains('N') || pieceID.Contains('n')) && !blocked)
 			{
 				filteredMove.Add(new Position(checkRank, checkFiles));
 			}
@@ -228,7 +179,7 @@ public class GameRunner
 				{
 					pawn.SetIsMoved(true);
 				}
-				// _switchPlayer?.Invoke();
+				_switchPlayer?.Invoke();
 				return true;
 			}
 		}
@@ -262,15 +213,28 @@ public class GameRunner
 		return true;
 	}
 	
+	private bool IsOccupiedByOpponent(string pieceID, int rank, int file)
+	{
+		foreach (var playerPieces in _piecesList.Values)
+		{
+			foreach (var piece in playerPieces)
+			{
+				if(piece.GetRank() == rank && piece.GetFiles() == files
+				&& piece.ID().Any(char.IsUpper) && pieceID.Any(char.IsLower))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public bool IsOccupied(string pieceID, int rank, int files)
 	{
 		foreach (var playerPieces in _piecesList.Values)
 		{
 			foreach(var piece in playerPieces)
 			{
-				// string pieceID1 = piece.ID();
-				// int pieceRank = piece.GetRank();
-				// int pieceFiles = piece.GetFiles();
 				if(piece.GetRank() == rank && piece.GetFiles() == files)
 				{
 					if(piece.ID().Any(Char.IsUpper) && pieceID.Any(Char.IsUpper) || piece.ID().Any(Char.IsLower) && pieceID.Any(Char.IsLower))
@@ -410,7 +374,66 @@ public class GameRunner
 			Piece king = CheckPiece("k1");
 			int kingRank = king.GetRank();
 			int kingFiles = king.GetFiles();
-			// return false;
+			foreach(var pieceList in _piecesList.Values)
+			{
+				foreach(var piece in pieceList)
+				{
+					if(piece is Rook && piece.ID().Contains('R'))
+					{
+						if(piece.GetRank() == kingRank || piece.GetFiles() == kingFiles)
+						{
+							bool blocked = IsPathClear("k1", piece.GetRank(), piece.GetFiles(), kingRank, kingFiles);
+							if(blocked)
+							{
+								SetGameStatus(GameStatus.CHECK);
+								return true;
+							}
+						}
+					}
+					if(piece is Bishop && piece.ID().Contains('B'))
+					{
+						int bishopRank = piece.GetRank();
+						int bishopFiles = piece.GetFiles();
+						if(Math.Abs(bishopRank - kingRank) == Math.Abs(bishopFiles - kingFiles))
+						{
+							bool blocked = IsPathClear("k1", bishopRank, bishopFiles, kingRank, kingFiles);
+							if(blocked)
+							{
+								SetGameStatus(GameStatus.CHECK);
+								return true;
+							}
+						}
+					}
+					if(piece is Knight && piece.ID().Contains('N'))
+					{
+						int knightRank = piece.GetRank();
+						int knightFiles = piece.GetFiles();
+						int rankDistance = Math.Abs(knightRank - kingRank);
+						int fileDistance = Math.Abs(knightFiles - kingFiles);
+						if(rankDistance == 2 && fileDistance == 1 || rankDistance == 1 && fileDistance == 2)
+						{
+							SetGameStatus(GameStatus.CHECK);
+							return true;
+						}
+					}
+					if (piece is Queen && piece.ID().Contains('Q'))
+					{
+						int queenRank = piece.GetRank();
+						int queenFiles = piece.GetFiles();
+						int rankDistance = Math.Abs(queenRank - kingRank);
+						int fileDistance = Math.Abs(queenFiles - kingFiles);
+						if(queenRank == kingRank || queenFiles == kingFiles || rankDistance == fileDistance)
+						{
+							bool blocked = IsPathClear("k1", queenRank, queenFiles, kingRank, kingFiles);
+							if(blocked)
+							{
+								SetGameStatus(GameStatus.CHECK);
+								return true;
+							}
+						}
+					}
+				}
+			}
 		}
 		return false;
 	}

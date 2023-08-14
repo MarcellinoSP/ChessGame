@@ -5,11 +5,12 @@ namespace ChessGame;
 
 public class PieceList
 {
-	public static readonly DataContractJsonSerializerSettings Settings = 
+	public static readonly DataContractJsonSerializerSettings settings = 
 					new DataContractJsonSerializerSettings
 					{ UseSimpleDictionaryFormat = true };
 					
 	public List<Piece> pieceListWhite = new List<Piece>();
+	public List<Piece> pieceListBlack = new List<Piece>();
 	
 	public void AddWhitePiece()
 	{
@@ -32,35 +33,43 @@ public class PieceList
 		pieceListWhite.Add(new Rook (7, 7, "Rook", "R2"));
 	}	
 	
-	// public List<Piece> pieceListBlack = new List<Piece>
-	// {
-	// 	new Pawn (1, 0, "p1"),
-	// 	new Pawn (1, 1, "p2"),
-	// 	new Pawn (1, 2, "p3"),
-	// 	new Pawn (1, 3, "p4"),
-	// 	new Pawn (1, 4, "p5"),
-	// 	new Pawn (1, 5, "p6"),
-	// 	new Pawn (1, 6, "p7"),
-	// 	new Pawn (1, 7, "p8"),
+	public void AddBlackPiece()
+	{
+		pieceListBlack.Add(new Pawn (1, 0, "Pawn", "p1"));
+		pieceListBlack.Add(new Pawn (1, 1, "Pawn", "p2"));
+		pieceListBlack.Add(new Pawn (1, 2, "Pawn", "p3"));
+		pieceListBlack.Add(new Pawn (1, 3, "Pawn", "p4"));
+		pieceListBlack.Add(new Pawn (1, 4, "Pawn", "p5"));
+		pieceListBlack.Add(new Pawn (1, 5, "Pawn", "p6"));
+		pieceListBlack.Add(new Pawn (1, 6, "Pawn", "p7"));
+		pieceListBlack.Add(new Pawn (1, 7, "Pawn", "p8"));
 				
-	// 	new Rook (0, 0, "r1"),
-	// 	new Knight (0, 1, "n1"),
-	// 	new Bishop (0, 2, "b1"),
-	// 	new Queen (0, 3, "q1"),
-	// 	new King (0, 4, "k1"),
-	// 	new Bishop (0, 5, "b2"),
-	// 	new Knight (0, 6, "n2"),
-	// 	new Rook (0, 7, "r2")
-	// };
+		pieceListBlack.Add(new Rook (0, 0, "Rook", "r1"));
+		pieceListBlack.Add(new Knight (0, 1, "Knight", "n1"));
+		pieceListBlack.Add(new Bishop (0, 2, "Bishop", "b1"));
+		pieceListBlack.Add(new Queen (0, 3, "Queen", "q1"));
+		pieceListBlack.Add(new King (0, 4, "King", "k1"));
+		pieceListBlack.Add(new Bishop (0, 5, "Bishop", "b2"));
+		pieceListBlack.Add(new Knight (0, 6, "Knight", "n2"));
+		pieceListBlack.Add(new Rook (0, 7, "Rook", "r2"));
+	}
 	
 	public void GenerateJSON()
 	{
 		FileStream stream = new FileStream("WhitePiece.json", FileMode.Create);
 		using (var writer = JsonReaderWriterFactory.CreateJsonWriter(stream, Encoding.UTF8, true, true, "  "))
 		{
-			var json1 = new DataContractJsonSerializer(typeof(List<Piece>), Settings);
+			var json1 = new DataContractJsonSerializer(typeof(List <Piece>), settings);
 			json1.WriteObject(writer, pieceListWhite);
 			stream.Flush();
+		}
+		
+		FileStream stream1 = new FileStream("BlackPiece.json", FileMode.Create);
+		using (var writer1 = JsonReaderWriterFactory.CreateJsonWriter(stream1, Encoding.UTF8, true, true, "  "))
+		{
+			var json2 = new DataContractJsonSerializer(typeof(List <Piece>), settings);
+			json2.WriteObject(writer1, pieceListBlack);
+			stream1.Flush();
 		}
 	}
 }
