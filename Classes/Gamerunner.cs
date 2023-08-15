@@ -176,6 +176,12 @@ public class GameRunner
 		
 		List <Position> filteredMove = FilterMove(pieceToMove);
 		
+		if(pieceToMove is King && filteredMove.Count == 0 && KingCheckStatus())
+		{
+			SetGameStatus(GameStatus.STALEMATE);
+			return false;
+		}
+		
 		foreach(var pos in filteredMove)
 		{
 			if(pos.GetRank() == rank && pos.GetFiles() == files)
@@ -207,7 +213,7 @@ public class GameRunner
 		
 		while (rank != targetRank || file != targetFile)
 		{
-			if (IsOccupied(rank, file))
+			if (IsOccupied(pieceID, rank, file))
 			{
 				return false;
 			}
@@ -219,22 +225,6 @@ public class GameRunner
 			}
 		}
 		return true;
-	}
-	
-	private bool IsOccupiedByOpponent(string pieceID, int rank, int file)
-	{
-		foreach (var playerPieces in _piecesList.Values)
-		{
-			foreach (var piece in playerPieces)
-			{
-				if(piece.GetRank() == rank && piece.GetFiles() == file
-				&& piece.ID().ToLower() != pieceID.ToLower())
-				{
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 	
 	public bool IsOccupied(string pieceID, int rank, int files)

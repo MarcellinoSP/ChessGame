@@ -27,7 +27,6 @@ class Program
 		gameStatus = GameStatus(chessGame);
 		do
 		{
-			Console.WriteLine(gameStatus);
 			bool kingChecked = chessGame.KingCheckStatus();
 			DrawBoard(chessGame);
 			IPlayer player = chessGame.GetCurrentTurn();
@@ -35,8 +34,8 @@ class Program
 			Console.WriteLine($"Current turn: {player.GetName()}");
 			int playerID = player.GetUID();
 			PlacePiece(chessGame, playerID);
-			gameStatus = GameStatus(chessGame);
 			Console.Clear();
+			gameStatus = GameStatus(chessGame);
 		}while(gameStatus == "ONGOING" || gameStatus == "CHECK");
 		Console.WriteLine($"Game finsihed with {gameStatus}");
 		
