@@ -142,7 +142,7 @@ public class GameRunner
 			int checkRank = position.GetRank();
 			int checkFiles = position.GetFiles();
 			bool blocked = IsOccupied(pieceID, checkRank, checkFiles);
-
+			
 			if (pieceID.Contains('P') || pieceID.Contains('p'))
 			{
 				if(!IsOccupied(checkRank, checkFiles))
@@ -219,8 +219,8 @@ public class GameRunner
 		{
 			foreach (var piece in playerPieces)
 			{
-				if(piece.GetRank() == rank && piece.GetFiles() == files
-				&& piece.ID().Any(char.IsUpper) && pieceID.Any(char.IsLower))
+				if(piece.GetRank() == rank && piece.GetFiles() == file
+				&& piece.ID().ToLower() != pieceID.ToLower())
 				{
 					return true;
 				}
@@ -303,133 +303,65 @@ public class GameRunner
 	public bool KingCheckStatus()
 	{
 		int boardSize = GetBoardBoundary();
-		if(_currentTurn == PlayerColor.WHITE)
+		Piece king = CheckPiece(_currentTurn == PlayerColor.WHITE ? "K1" : "k1");
+		int kingRank = king.GetRank();
+		int kingFiles = king.GetFiles();
+
+		foreach (var pieceList in _piecesList.Values)
 		{
-			Piece king = CheckPiece("K1");
-			int kingRank = king.GetRank();
-			int kingFiles = king.GetFiles();
-			foreach(var pieceList in _piecesList.Values)
+			foreach (var piece in pieceList)
 			{
-				foreach(var piece in pieceList)
+				if (piece is Rook rook && piece.ID().Contains(_currentTurn == PlayerColor.WHITE ? 'r' : 'R'))
 				{
-					if(piece is Rook && piece.ID().Contains('r'))
+					if (rook.GetRank() == kingRank || rook.GetFiles() == kingFiles)
 					{
-						if(piece.GetRank() == kingRank || piece.GetFiles() == kingFiles)
-						{
-							bool blocked = IsPathClear("K1", piece.GetRank(), piece.GetFiles(), kingRank, kingFiles);
-							if(blocked)
-							{
-								SetGameStatus(GameStatus.CHECK);
-								return true;
-							}
-						}
-					}
-					if(piece is Bishop && piece.ID().Contains('b'))
-					{
-						int bishopRank = piece.GetRank();
-						int bishopFiles = piece.GetFiles();
-						if(Math.Abs(bishopRank - kingRank) == Math.Abs(bishopFiles - kingFiles))
-						{
-							bool blocked = IsPathClear("K1", bishopRank, bishopFiles, kingRank, kingFiles);
-							if(blocked)
-							{
-								SetGameStatus(GameStatus.CHECK);
-								return true;
-							}
-						}
-					}
-					if(piece is Knight && piece.ID().Contains('n'))
-					{
-						int knightRank = piece.GetRank();
-						int knightFiles = piece.GetFiles();
-						int rankDistance = Math.Abs(knightRank - kingRank);
-						int fileDistance = Math.Abs(knightFiles - kingFiles);
-						if(rankDistance == 2 && fileDistance == 1 || rankDistance == 1 && fileDistance == 2)
+						bool blocked = IsPathClear(king.ID(), rook.GetRank(), rook.GetFiles(), kingRank, kingFiles);
+						if (blocked)
 						{
 							SetGameStatus(GameStatus.CHECK);
 							return true;
-						}
-					}
-					if (piece is Queen && piece.ID().Contains('q'))
-					{
-						int queenRank = piece.GetRank();
-						int queenFiles = piece.GetFiles();
-						int rankDistance = Math.Abs(queenRank - kingRank);
-						int fileDistance = Math.Abs(queenFiles - kingFiles);
-						if(queenRank == kingRank || queenFiles == kingFiles || rankDistance == fileDistance)
-						{
-							bool blocked = IsPathClear("K1", queenRank, queenFiles, kingRank, kingFiles);
-							if(blocked)
-							{
-								SetGameStatus(GameStatus.CHECK);
-								return true;
-							}
 						}
 					}
 				}
-			}
-		}
-		else if(_currentTurn == PlayerColor.BLACK)
-		{
-			Piece king = CheckPiece("k1");
-			int kingRank = king.GetRank();
-			int kingFiles = king.GetFiles();
-			foreach(var pieceList in _piecesList.Values)
-			{
-				foreach(var piece in pieceList)
+				else if (piece is Bishop bishop && piece.ID().Contains(_currentTurn == PlayerColor.WHITE ? 'b' : 'B'))
 				{
-					if(piece is Rook && piece.ID().Contains('R'))
+					int bishopRank = bishop.GetRank();
+					int bishopFiles = bishop.GetFiles();
+					if (Math.Abs(bishopRank - kingRank) == Math.Abs(bishopFiles - kingFiles))
 					{
-						if(piece.GetRank() == kingRank || piece.GetFiles() == kingFiles)
-						{
-							bool blocked = IsPathClear("k1", piece.GetRank(), piece.GetFiles(), kingRank, kingFiles);
-							if(blocked)
-							{
-								SetGameStatus(GameStatus.CHECK);
-								return true;
-							}
-						}
-					}
-					if(piece is Bishop && piece.ID().Contains('B'))
-					{
-						int bishopRank = piece.GetRank();
-						int bishopFiles = piece.GetFiles();
-						if(Math.Abs(bishopRank - kingRank) == Math.Abs(bishopFiles - kingFiles))
-						{
-							bool blocked = IsPathClear("k1", bishopRank, bishopFiles, kingRank, kingFiles);
-							if(blocked)
-							{
-								SetGameStatus(GameStatus.CHECK);
-								return true;
-							}
-						}
-					}
-					if(piece is Knight && piece.ID().Contains('N'))
-					{
-						int knightRank = piece.GetRank();
-						int knightFiles = piece.GetFiles();
-						int rankDistance = Math.Abs(knightRank - kingRank);
-						int fileDistance = Math.Abs(knightFiles - kingFiles);
-						if(rankDistance == 2 && fileDistance == 1 || rankDistance == 1 && fileDistance == 2)
+						bool blocked = IsPathClear(king.ID(), bishopRank, bishopFiles, kingRank, kingFiles);
+						if (blocked)
 						{
 							SetGameStatus(GameStatus.CHECK);
 							return true;
 						}
 					}
-					if (piece is Queen && piece.ID().Contains('Q'))
+				}
+				else if (piece is Knight knight && piece.ID().Contains(_currentTurn == PlayerColor.WHITE ? 'n' : 'N'))
+				{
+					int knightRank = knight.GetRank();
+					int knightFiles = knight.GetFiles();
+					int rankDistance = Math.Abs(knightRank - kingRank);
+					int fileDistance = Math.Abs(knightFiles - kingFiles);
+					if ((rankDistance == 2 && fileDistance == 1) || (rankDistance == 1 && fileDistance == 2))
 					{
-						int queenRank = piece.GetRank();
-						int queenFiles = piece.GetFiles();
-						int rankDistance = Math.Abs(queenRank - kingRank);
-						int fileDistance = Math.Abs(queenFiles - kingFiles);
-						if(queenRank == kingRank || queenFiles == kingFiles || rankDistance == fileDistance)
+						SetGameStatus(GameStatus.CHECK);
+						return true;
+					}
+				}
+				else if (piece is Queen queen && piece.ID().Contains(_currentTurn == PlayerColor.WHITE ? 'q' : 'Q'))
+				{
+					int queenRank = queen.GetRank();
+					int queenFiles = queen.GetFiles();
+					int rankDistance = Math.Abs(queenRank - kingRank);
+					int fileDistance = Math.Abs(queenFiles - kingFiles);
+					if (queenRank == kingRank || queenFiles == kingFiles || rankDistance == fileDistance)
+					{
+						bool blocked = IsPathClear(king.ID(), queenRank, queenFiles, kingRank, kingFiles);
+						if (blocked)
 						{
-							bool blocked = IsPathClear("k1", queenRank, queenFiles, kingRank, kingFiles);
-							if(blocked)
-							{
-								SetGameStatus(GameStatus.CHECK);
-								return true;
-							}
+							SetGameStatus(GameStatus.CHECK);
+							return true;
 						}
 					}
 				}
