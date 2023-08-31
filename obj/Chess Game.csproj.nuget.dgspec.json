@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {}
+    "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {
+    "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
+        "projectUniqueName": "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
         "projectName": "Chess Game",
-        "projectPath": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
+        "projectPath": "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\obj\\",
+        "outputPath": "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"

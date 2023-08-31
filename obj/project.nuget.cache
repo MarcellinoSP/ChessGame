@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rHtMu/2tQYLAnR8Y4+XlXF+5EGhAHTJCm0Hd3SftQT1eYtdPqqKpQCzdo/zG79c+OTojtMiHN3SM2tDxyo8Ppg==",
+  "dgSpecHash": "WQCWuHbJmiDFDBWIxI2VUGkdvIXl6PO0wdxM8G1L5eSNIIA4lqjiOS2DogiINb4K/tN+CkM05VpEMZLG3HyncQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
+  "projectFilePath": "c:\\Users\\user\\Documents\\Berkas Daftar Kerja\\Chess Game Project\\Chess Game\\Chess Game.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\nlog\\5.2.3\\nlog.5.2.3.nupkg.sha512"
   ],

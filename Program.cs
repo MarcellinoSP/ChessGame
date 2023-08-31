@@ -1,4 +1,4 @@
-﻿#define RUN
+﻿#define TEST
 using ChessGame;
 using NLog;
 
